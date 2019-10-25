@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<html>
+<head>
+	<style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 600px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+
+	<meta charset="UTF-8">
+	<title>Astronomy Website Template</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper clearfix">
+			<div id="logo">
+				<a href="index.html"><img src="images/logo.png" alt="LOGO"></a>
+			</div>
+			<ul id="navigation">
+				<li class="selected">
+					<a href="index.html">Map</a>
+				</li>
+				<li>
+					<a href="about.html">About</a>
+				</li>
+				<li>
+					<a href="blog.html">Blog</a>
+				</li>
+				<li>
+					<a href="gallery.html">Gallery</a>
+				</li>
+				<li>
+					<a href="contact.html">Contact Us</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="contents">
+		<div id="map">
+			
+		</div>
+
+	</div>
+	<div id="footer">
+		<div class="body">
+			<div class="wrapper clearfix">
+				<div id="links">
+					<div>
+						<h4>Social</h4>
+						<ul>
+							<li>
+								<a href="http://freewebsitetemplates.com/go/googleplus/" target="_blank">Google +</a>
+							</li>
+							<li>
+								<a href="http://freewebsitetemplates.com/go/facebook/" target="_blank">Facebook</a>
+							</li>
+							<li>
+								<a href="http://freewebsitetemplates.com/go/youtube/" target="_blank">Youtube</a>
+							</li>
+						</ul>
+					</div>
+					<div>
+						<h4>Heading placeholder</h4>
+						<ul>
+							<li>
+								<a href="index.html">Link Title 1</a>
+							</li>
+							<li>
+								<a href="index.html">Link Title 2</a>
+							</li>
+							<li>
+								<a href="index.html">Link Title 3</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="newsletter">
+					<h4>Newsletter</h4>
+					<p>
+						Sign up for Our Newsletter
+					</p>
+					<form action="index.html" method="post">
+						<input type="text" value="">
+						<input type="submit" value="Sign Up!">
+					</form>
+				</div>
+				<p class="footnote">
+					© Copyright © 2023.Company name all rights reserved
+				</p>
+			</div>
+		</div>
+	</div>
+	  <script>
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  var uluru = {lat: -25.363, lng: 131.044};
+
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 12, center: uluru});
+  // The marker, positioned at Uluru
+    var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+      'sandstone rock formation in the southern part of the '+
+      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+      'south west of the nearest large town, Alice Springs; 450&#160;km '+
+      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+      'Aboriginal people of the area. It has many springs, waterholes, '+
+      'rock caves and ancient paintings. Uluru is listed as a World '+
+      'Heritage Site.</p>'+
+      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+      '(last visited June 22, 2009).</p>'+
+      '</div>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+    position: uluru,
+    map: map,
+    title: 'Uluru (Ayers Rock)'
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+
+}
+$.ajax({
+type: “POST”,
+url: “curl -v -XPOST https://api.dp.la/v2/api_key/YOUR_EMAIL@example.com 97”, //replace with my email
+dataType: “json”,
+success: function(data) {
+console.log(data);
+}
+
+});
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>OpenLayers Demo</title>
+    <style type="text/css">
+      html, body, #basicMap {
+          height: 600px;  /* The height is 400 pixels */
+        width: 100%;
+      }
+    </style>
+    <script src="OpenLayers.js"></script>
+    <script>
+    	function init() {
+    		map = new OpenLayers.Map("basicMap");
+    		var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(4.3872,45.4397).transform( fromProjection, toProjection);
+        var zoom           = 15; 
+
+        var lat = 45.442972;
+        var lon = 4.398855;
+
+        var marker_position       = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+
+        map.addLayer(mapnik);
+        
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+        markers.addMarker(new OpenLayers.Marker(marker_position));
+        loadMarkers(markers, fromProjection, toProjection);
+        map.setCenter(position, zoom );
+        
+    }
+    function loadMarkers(markers,fromProjection,toProjection) {
+    	var xhttp = new XMLHttpRequest();
+    	xhttp.onreadystatechange = function() {
+    		if (this.readyState == 4 && this.status == 200) {
+    			var obj = JSON.parse(this.responseText);
+    			var results = obj.results;
+    			var bindings = results.bindings;
+    			var str = '';
+    			for (var i = 0; i < bindings.length; i++) {
+    				var obj = bindings[i];
+    				var lat_obj = obj['lat'];
+    				var lon_obj = obj['lon'];
+    				var lat_value = lat_obj.value;
+    				var lon_value = lon_obj.value;
+    				//add markers on map
+    				var marker_position = new OpenLayers.LonLat(lon_value, lat_value).transform( fromProjection, toProjection);
+    				markers.addMarker(new OpenLayers.Marker(marker_position));
+    				//str += "<br> - " + lat_value + ": " + lon_value;
+    			}
+    	}
+};
+xhttp.open("POST", "http://localhost:3030/bicyledata/query", true);
+xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xhttp.send("query=select ?lat ?lon where {?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon. ?station <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat. ?station <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> }");
+}
+    </script>
+  </head>
+  <body onload="init();">
+    <div id="basicMap"></div>
+  </body>
+</html>

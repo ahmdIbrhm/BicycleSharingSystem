@@ -15,21 +15,17 @@
     		var mapnik         = new OpenLayers.Layer.OSM();
         var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
         var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        
+        // take any location of stations and set zoom over it
+
         var position       = new OpenLayers.LonLat(4.3872,45.4397).transform( fromProjection, toProjection);
         var zoom           = 14; 
 
-        var lat = 45.442972;
-        var lon = 4.398855;
-
-        var marker_position       = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
-
+       
         map.addLayer(mapnik);
         
-        //var markers = new OpenLayers.Layer.Markers( "Markers" );
-		var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
-        //map.addLayer(markers);
-        //markers.addMarker(new OpenLayers.Marker(marker_position));
-        loadMarkers(vectorLayer,fromProjection, toProjection);
+        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+        //loadMarkers(vectorLayer,fromProjection, toProjection);
         
         map.addLayer(vectorLayer);
         var controls = { selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup }) };
@@ -68,9 +64,19 @@
     			}
     		}
     	};
+    	var dynamicSelect = document.getElementById("cities_select");
+    	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
+    	//alert(selected_city);
     	xhttp.open("POST", "http://localhost:3030/bicyledata/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    	xhttp.send("query=select ?lat ?lon ?capacity ?name where {?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> ;<http://www.w3.org/2000/01/rdf-schema#label> ?name; <http://www.wikidata.org/prop/direct/P1083> ?capacity }");
+    	xhttp.send("query=select ?lat ?lon ?capacity ?name where { \
+    					?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; \
+    					<http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; \
+    					<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing>; \
+    					<http://www.w3.org/2000/01/rdf-schema#label> ?name; \
+    					<http://www.wikidata.org/prop/direct/P1083> ?capacity; \
+    					 <http://www.wikidata.org/prop/direct/P276> <"+selected_city+"> \
+    				}");
     }
     function createPopup(feature) {
       feature.popup = new OpenLayers.Popup.FramedCloud("pop",
@@ -89,16 +95,55 @@
       feature.popup.destroy();
       feature.popup = null;
     }
+    function loadCities(){
     
-    </script>
+    var dynamicSelect = document.getElementById("cities_select");
 
+	var xhttp = new XMLHttpRequest();
+    	xhttp.onreadystatechange = function() {
+    		if (this.readyState == 4 && this.status == 200) {
+    			var obj = JSON.parse(this.responseText);
+    			var results = obj.results;
+    			var bindings = results.bindings;
+    			var str = '';
+    			for (var i = 0; i < bindings.length; i++) {
+    				var obj = bindings[i];
+    				var name = obj['name'].value;
+    				var uri = obj['city'].value;
+    				var opt = document.createElement("option");
+    				opt.value= uri;
+    				opt.innerHTML = name;
+    				dynamicSelect.appendChild(opt);
+    			}
+    			init();
+
+    		}
+    	};
+    	xhttp.open("POST", "http://localhost:3030/bicyledata/query", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
+    }
+    </script>
+    <script type="application/ld+json">
+    	{
+    		"@context": "https://schema.org",
+    		"@type": "Organization",
+    		"url": "http://www.example.com",
+    		"name": "Unlimited Ball Bearings Corp.",
+    		"contactPoint": {
+    		"@type": "ContactPoint",
+    		"telephone": "+1-401-555-1212",
+    		"contactType": "Customer service"
+    	}
+    }
+</script>
 	<meta charset="UTF-8">
 	<title>Astronomy Website Template</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<link rel="stylesheet" href="css/combo.css" type="text/css">
 	
 </head>
-<body onload="init()">
+<body onload="loadCities()">
 	<div id="header">
 		<div class="wrapper clearfix">
 			<div id="logo">
@@ -130,11 +175,7 @@
 						<h3 style="color:white;">Choose city:</h3>
 					</div>
 					<div class="custom-select" style="width:300px;">
-							<select>
-  								<option value="Saint-Etienne">Saint-Etienne</option>
-  								<option value="Lyon">Lyon</option>
-  								<option value="Montpellier">Montpellier</option>
-  								<option value="Paris">Paris</option>
+							<select id="cities_select">
 							</select>
 					</div>
 				</div>

@@ -35,43 +35,263 @@
 		<div class="wrapper clearfix">
 			<div id="sidebar">
 				<ul>
-					<li>
-						<a href="blog.html"><img src="images/earth-small.jpg" alt="Img" height="154" width="213"></a>
-					</li>
-					<li>
-						<a href="blog.html"><img src="images/spaceshuttle-closeup.jpg" alt="Img" height="154" width="213"></a>
-					</li>
 				</ul>
-				<div class="click-here">
-					<h1>Lorem Ipsum Dolor!</h1>
-					<a href="index.html" class="btn1">Click Here!</a>
-				</div>
 			</div>
 			<div class="main">
 				<h1>Blog</h1>
 				<ul class="list">
 					<li>
-						<span class="time">01-01-2012</span>
-						<h4>Blog Title One</h4>
-						<p>
-							This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your 
-							own text.This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with 
-							your own text.
+						<h4>Insert a new dataset</h4>
 						</p>
-						<a href="blog.html" class="more">Read more&gt;&gt;</a>
+						<table width="20%">
+							<tr>
+								<td>
+									<select id="listTypeFile">
+										<option value="json">JSON</option>
+										<option value="csv">CSV</option>
+										<option value="xml">XML</option>
+										<option value="other">Other</option>	
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>City name:</td>
+								<td><input type="text" id="editTextCityName"/></td>
+							</tr>
+							<tr>
+								<td><input type="file" id="fileinput"/></td>
+							</tr>
+							<tr>
+								<td>Key:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							<tr>
+								<td>Iterator:</td>
+								<td> <input type="text" id="editTextIterator"/></td>
+							</tr>
+						</table>
+
+						<h3>Mappings:</h3>
+						<table id="tableTags" width="50%">
+							<tr>
+								<td>Id Tag:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							<tr>
+								<td>Name Tag:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							<tr>
+								<td>Capacity Tag:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							<tr>
+								<td>Latitude Tag:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							<tr>
+								<td>Longtitude Tag:</td>
+								<td><input type="text" id="editTextkey"/></td>
+							</tr>
+							</table>
+							<table id="tableMapping" width="100%"></table>
+
+						<script>
+							function addMapping() 
+							{
+								var labelTag='<label>Tag: </label>';
+								var editTextTag='<input type="text" name="tag" id="tag">';
+								var labelProperty='<label> Property: </label>';
+								var listProperty='<input type="text" name="property" id="property">';
+								// var variable='<select>'+
+								// 	'<option value="http://www.example.org/id">Id</option>'+
+								// 	'<option value="http://www.w3.org/2000/01/rdf-schema#label">Name</option>'+
+								// 	'<option value="http://www.wikidata.org/prop/direct/P1083">Capacity</option>'+
+								// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#lat">Latitude</option>'+
+								// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#long"> Longtitude</option>'+
+								// 	'</select>';
+								var labelType='<label> Type: </label>';
+								var listType='<select>'+
+									'<option value="literal">LITERAL</option><option value="uri">URI</option>'+
+									'</select>';
+								var buttonDelete='<input type="button" value="Delete" onclick="deleteMapping(this)">'
+  								var array=[labelTag,editTextTag,labelProperty,listProperty,labelType,listType,buttonDelete];
+
+  								var table=document.getElementById("tableMapping");
+  								var row=table.insertRow(-1);
+  								
+  								for(var i=0;i<array.length;i++)
+  								{
+  									var cell=row.insertCell(i);
+  									cell.innerHTML=array[i];
+  								}
+							}
+							function deleteMapping(element)
+							{
+								var index=element.parentNode.parentNode.rowIndex;
+								document.getElementById("tableMapping").deleteRow(index);
+							}
+
+							// addMapping();
+						</script>
+						<script type="text/javascript">
+							var buttonAddMapping="<button onclick='addMapping()'>Add another mapping</button>";
+							var row=document.getElementById("tableTags").insertRow(-1);
+							var cellVirtual=row.insertCell(0);
+							var cell=row.insertCell(0);
+							cellVirtual.innerHTML="";
+							cell.innerHTML=buttonAddMapping;
+							// cell.colSpan=2;
+						</script>
+
+						
 					</li>
 					<li>
-						<span class="time">01-01-2012</span>
-						<h4>Blog Title One</h4>
-						<p>
-							This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your 
-							own text.This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with 
-							your own text.
-						</p>
-						<a href="blog.html" class="more">Read more&gt;&gt;</a>
+						<h4>Dynamic data</h4>
+							<table id="tableTags" width="50%">
+								<tr>
+									<td>Link for dynamic data:</td>
+									<td><input type="text" id="editTextDynamicDataLink"/></td>
+								</tr>
+								<tr>
+									<td>File type:</td>
+									<td>
+										<select id="listTypeFileDynamic">
+											<option value="json">JSON</option>
+											<option value="csv">CSV</option>
+											<option value="xml">XML</option>
+											<option value="other">Other</option>	
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Key Tag:</td>
+									<td><input type="text" id="editTextKeyDynamic"/></td>
+								</tr>
+								<tr>
+									<td>Iterator Tag:</td>
+									<td><input type="text" id="editTextIteratorDynamic"/></td>
+								</tr>
+								<tr>
+									<td>Available Bicycles Tag:</td>
+									<td><input type="text" id="editTextAvailableBicyclesTag"/></td>
+								</tr>
+								<tr>
+									<td>Available Docks Tag:</td>
+									<td><input type="text" id="editTextAvailableDocksTag"/></td>
+								</tr>
+							</table>
+
+
 					</li>
+					<input type="submit" onclick="sendInformation()" value="Send information">
+						
+						<script>
+							function sendInformation() 
+							{
+								var tableMapping = document.getElementById('tableMapping');
+								var tableTags=document.getElementById('tableTags');
+								var nbOfRows = tableMapping.rows.length;
+								
+								var cityName = document.getElementById('editTextCityName').value;
+								var listTypeFile = document.getElementById('listTypeFile');
+								var typeOfFile = listTypeFile[listTypeFile.selectedIndex].value;
+								var file = document.getElementById('fileinput').files[0];
+								var key = document.getElementById('editTextkey').value;
+								var iterator = document.getElementById('editTextIterator').value;
+
+								
+								var tagId=tableTags.rows[0].cells[1].childNodes[0].value;
+								var tagName=tableTags.rows[1].cells[1].childNodes[0].value;
+								var tagCapacity=tableTags.rows[2].cells[1].childNodes[0].value;
+								var tagLatitude=tableTags.rows[3].cells[1].childNodes[0].value;
+								var tagLongtitude=tableTags.rows[4].cells[1].childNodes[0].value;
+
+								var propertyId="http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+								var propertyName="http://www.w3.org/2000/01/rdf-schema#label";
+								var propertyCapacity="http://www.wikidata.org/prop/direct/P1083";
+								var propertyLatitude="http://www.w3.org/2003/01/geo/wgs84_pos#lat";
+								var propertyLongtitude="http://www.w3.org/2003/01/geo/wgs84_pos#long";
+								var propertyAvailableBicycles="http://www.example.org/availableBicycles";
+								var propertyAvailableDocks="http://www.example.org/availableDocks";
+
+								var arrayTags=[tagId,tagName,tagCapacity,tagLatitude,tagLongtitude];
+								var arrayProperties=[propertyId,propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
+
+								var arrayMappings=[];
+
+								//put the type of the station as a spacial thing
+								var mapping={"tag":tagId,"property":propertyId,"type":"uri","objectURI":"http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"};
+								arrayMappings.push(mapping);
+
+								//start from i=1 because propertyId should have objectURI!!! See above 
+								for(var i=1;i<arrayTags.length;i++)
+								{
+									var mapping={"tag":arrayTags[i],"property":arrayProperties[i],"type":"literal"};
+									arrayMappings.push(mapping);
+								}
+
+							    for ( var i = 0; row = tableMapping.rows[i]; i++ ) 
+							    {
+							      	row = tableMapping.rows[i];
+							      	var tag=row.cells[1].childNodes[0].value;
+							      	var property=row.cells[3].childNodes[0].value;
+							      	var type=row.cells[5].childNodes[0].value;
+							      	var mapping={"tag":tag,"property":property,"type":type};
+							      	arrayMappings.push(mapping);
+							 	}
+							 	// alert(arrayMappings.length);
+							 	var staticParameters={"cityName":cityName,"typeOfFile":typeOfFile,"key":key,"iterator":iterator,"arrayMappings":arrayMappings};
+  								// var query="select ?s ?p ?o where {?s <http://www.w3.org/2000/01/rdf-schema#label> ?o .} limit 10"
+  								// var queryUrl = "http://localhost:3030/BicycleSharing/sparql?query=" + encodeURIComponent(query) + "&format=json";
+  								var staticOptions = JSON.stringify(staticParameters);
+
+
+  								//For dynamic data
+  								var listTypeFileDynamic = document.getElementById('listTypeFileDynamic');
+  								var typeOfFileDynamic=listTypeFile[listTypeFile.selectedIndex].value;
+  								var dynamicKey=document.getElementById('editTextKeyDynamic').value;
+  								var dynamicIterator=document.getElementById('editTextIteratorDynamic').value;
+  								var dynamicLink=document.getElementById('editTextDynamicDataLink').value;
+  								var dynamicAvailableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
+  								var dynamicAvailableDocks=document.getElementById('editTextAvailableDocksTag').value;
+
+  								// //add dynamic mappings to array
+  								var arrayMappingsDynamic=[];
+  								var mapping1={"tag":dynamicAvailableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
+  								var mapping2={"tag":dynamicAvailableDocks,"property":propertyAvailableDocks,"type":"literal"};
+  								arrayMappingsDynamic.push(mapping1);
+  								arrayMappingsDynamic.push(mapping2);
+  								var dynamicParameters={"linkFile":dynamicLink,"typeOfFile":typeOfFileDynamic,"key":dynamicKey,"iterator":dynamicIterator,"arrayMappings":arrayMappingsDynamic};
+
+  								var dynamicOptions=JSON.stringify(dynamicParameters);
+  								// alert(dynamicOptions);
+
+  								var request = new XMLHttpRequest();
+  								request.open("POST", "script.php");
+  								var formData = new FormData();
+								formData.append("file", file);
+								formData.append("staticOptions",staticOptions);
+								formData.append("dynamicOptions",dynamicOptions);
+  								request.send(formData);
+
+  								request.onreadystatechange = function() {
+							        // Check if the request is compete and was successful
+							        // alert("Asd");
+							        // alert("Ready state: "+this.readyState);
+							        // alert("Status: "+this.status);
+							        if(this.readyState === 4 && this.status === 200) {
+							        	alert(this.	responseText);
+							    	}
+							    	
+						    	};
+
+
+  								
+
+							}
+						</script>						
 					<li>
-						<span class="time">01-01-2012</span>
 						<h4>Blog Title One</h4>
 						<p>
 							This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your 

@@ -36,10 +36,10 @@ if (isset($_FILES['file']))
 
 
 
-	// $javaCommandStatic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFile . '" -k "' . $key . '" -i "' . $iterator . '" -a "' . $stringMappings . '" -f "' . $inputFile . '" ';
+	$javaCommandStatic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFile . '" -k "' . $key . '" -i "' . $iterator . '" -a "' . $stringMappings . '" -f "' . $inputFile . '" ';
 	// echo exec($javaCommandStatic,$outputStatic);
-	// sleep (5);
-	$javaCommandDynamic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFileDynamic . '" -k "' . $keyDynamic . '" -i "' . $iteratorDynamic . '" -a "' . $stringMappingsDynamic . '" -f "' . $fileNameDynamic . '"';
+	sleep (1);
+	$javaCommandDynamic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFileDynamic . '" -k "' . $keyDynamic . '" -i "' . $iteratorDynamic . '" -a "' . $stringMappingsDynamic . '" -f "' . $fileNameDynamic . '" -u "' . $linkFileDynamic . '" ';
 	echo exec($javaCommandDynamic,$outputDynamic);
 	
 	

@@ -26,7 +26,7 @@
                             <mainClass>semweb.DynamicParametersProvider</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>/home/alyhdr/Desktop/Semantic_Web_Course/BicycleSharingSystem/Bicycle_Website</outputDirectory>
+                    <outputDirectory>/var/www/html/BicycleSharingSystem/Bicycle_Website</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

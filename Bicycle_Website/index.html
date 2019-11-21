@@ -8,34 +8,29 @@
         width: 100%;
       }
     </style>
-    <script src="OpenLayersDir/OpenLayers.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
     <script >
+    	var mymap;
+
     	function init() {
-    		map = new OpenLayers.Map("basicMap");
-    		var mapnik         = new OpenLayers.Layer.OSM();
-        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
-        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-        
-        // take any location of stations and set zoom over it
-
-        var position       = new OpenLayers.LonLat(4.3872,45.4397).transform( fromProjection, toProjection);
-        var zoom           = 14; 
-
-       
-        map.addLayer(mapnik);
-        
-        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
-        //loadMarkers(vectorLayer,fromProjection, toProjection);
-        
-        map.addLayer(vectorLayer);
-        var controls = { selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup }) };
-        map.addControl(controls['selector']);
-    	controls['selector'].activate();
-        
-        map.setCenter(position, zoom );
-        
+    	
+    	mymap = L.map('basicMap');
+ 	 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+		}).addTo(mymap);
+		loadMarkers();
     }
-    function loadMarkers(vectorLayer,fromProjection,toProjection) {
+    function loadMarkers() {
+
     	var xhttp = new XMLHttpRequest();
     	xhttp.onreadystatechange = function() {
     		if (this.readyState == 4 && this.status == 200) {
@@ -43,6 +38,9 @@
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
+    			var center_lat = 0;
+    			var center_lon = 0;
+    			var counter = 0;
     			for (var i = 0; i < bindings.length; i++) {
     				var obj = bindings[i];
     				var lat_obj = obj['lat'];
@@ -52,31 +50,36 @@
     				var lon_value = lon_obj.value;
     				var capacity = obj['capacity'].value;
     				var name = obj['name'].value;
+    				
+    				var av_bikes = obj['av_bikes'].value;
+    				var av_docks = obj['av_docks'].value;
+    				var unix_timestamp = obj['max_date'].value;
 
-    				//add markers on map
-    				var feature = new OpenLayers.Feature.Vector(
-    					new OpenLayers.Geometry.Point(lon_value, lat_value).transform(fromProjection, toProjection),
-    					{description:'<b>Bicycle station</b> <br/> name: '+name+'<br/>capacity: '+capacity} ,
-    					{externalGraphic: 'OpenLayersDir/img/marker.png', graphicHeight: 30, graphicWidth: 27, graphicXOffset:-12, graphicYOffset:-25  }
-    					);    
-    				vectorLayer.addFeatures(feature);
+    				var seconds = parseInt(new Date().getTime() / 1000);
+    				var update_time = seconds - unix_timestamp;
 
+ 	 				L.marker([lat_value, lon_value ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> name: '+name+'<br/><h3>capacity:'+capacity+'</h3><h3>av_bikes: '+av_bikes+'<image src="images/dock.png" width="60" height="30"></h3>'+'<br/>av_docks: '+av_docks+'<image src="images/dock.png" width="60" height="30">'+'<br/>last updated: '+update_time+'s ago');
+ 	 				center_lat += parseFloat(lat_value);
+ 	 				center_lon += parseFloat(lon_value);
+ 	 				counter++;
     			}
+
+    			center_lat = center_lat /counter;
+    			center_lon = center_lon / counter;
+
+    			mymap.setView([center_lat, center_lon], 13);
     		}
     	};
-    	var dynamicSelect = document.getElementById("cities_select");
+    	var dynamicSelect = document.getElementById("dynamic_select");
+
     	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
-    	//alert(selected_city);
-    	xhttp.open("POST", "http://localhost:3030/bicyledata/query", true);
+
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    	xhttp.send("query=select ?lat ?lon ?capacity ?name where { \
-    					?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; \
-    					<http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; \
-    					<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing>; \
-    					<http://www.w3.org/2000/01/rdf-schema#label> ?name; \
-    					<http://www.wikidata.org/prop/direct/P1083> ?capacity; \
-    					 <http://www.wikidata.org/prop/direct/P276> <"+selected_city+"> \
-    				}");
+    	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> SELECT ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks WHERE { ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; <http://www.w3.org/2000/01/rdf-schema#label> ?name ; wdt:P1083 ?capacity ; wdt:P276 <"+selected_city+">{ SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks) WHERE { ?station <http://www.schema.org/State> ?state . ?state <http://www.example.org/time> ?date ; <http://www.example.org/availableBicycles> ?availableBicycles ; <http://www.example.org/availableDocks> ?availableDocks; } group by ?station } }";
+
+    	xhttp.send(query);
+
     }
     function createPopup(feature) {
       feature.popup = new OpenLayers.Popup.FramedCloud("pop",
@@ -97,31 +100,33 @@
     }
     function loadCities(){
     
-    var dynamicSelect = document.getElementById("cities_select");
+    var dynamicSelect = document.getElementById("dynamic_select");
+   	var xhttp = new XMLHttpRequest();
 
-	var xhttp = new XMLHttpRequest();
     	xhttp.onreadystatechange = function() {
     		if (this.readyState == 4 && this.status == 200) {
+
     			var obj = JSON.parse(this.responseText);
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
     			for (var i = 0; i < bindings.length; i++) {
+
     				var obj = bindings[i];
     				var name = obj['name'].value;
     				var uri = obj['city'].value;
-    				var opt = document.createElement("option");
-    				opt.value= uri;
-    				opt.innerHTML = name;
-    				dynamicSelect.appendChild(opt);
+
+    				dynamicSelect.innerHTML += "<option value=\""+uri+"\" >"+name+"</option>";
+
     			}
     			init();
 
     		}
     	};
-    	xhttp.open("POST", "http://localhost:3030/bicyledata/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
+
     }
     </script>
     <script type="application/ld+json">
@@ -147,19 +152,17 @@
 	<div id="header">
 		<div class="wrapper clearfix">
 			<div id="logo">
+				<a href="index.html"><img src="images/logo.png" width="60" height="50"></a>
 			</div>
 			<ul id="navigation">
 				<li class="selected">
 					<a href="index.html">Map</a>
 				</li>
 				<li>
-					<a href="about.html">About</a>
+					<a href="about.html">Stastics</a>
 				</li>
 				<li>
-					<a href="blog.html">Blog</a>
-				</li>
-				<li>
-					<a href="gallery.html">Gallery</a>
+					<a href="blog.html">Add Cities</a>
 				</li>
 				<li>
 					<a href="contact.html">Contact Us</a>
@@ -167,25 +170,22 @@
 			</ul>
 		</div>
 	</div>
+
 	<div id="footer">
-		<div class="body">
-			<div class="wrapper clearfix">
-				<div id="links">
-					<div>		
-						<h3 style="color:white;">Choose city:</h3>
-					</div>
-					<div class="custom-select" style="width:300px;">
-							<select id="cities_select">
-							</select>
-					</div>
-				</div>
-				<div>
-					<br/>
-					<br/>
-					<h3 style="color:white;"> Check bicycle stations with the description of the current state by clicking on the marker </h3>
-				</div>
-			</div>
+		<div class="wrapper clearfix">		
+			<h3>Choose city:</h3>
+			<select id="dynamic_select" onchange="loadMarkers()">
+
+			</select>
+			</br>
+			<p style="font-size:160%;">Click on the markers viewed on the map to check bicycle stations information</p>
+			</br>
+			</br>
+			</br>
+			</br>
+			
 		</div>
+		
 	</div>
 	<div id="contents">
 		<div id="basicMap">
@@ -193,80 +193,6 @@
 		</div>
 
 	</div>
-	
-	<script>
-var x, i, j, selElmnt, a, b, c;
-/*look for any elements with the class "custom-select":*/
-x = document.getElementsByClassName("custom-select");
-for (i = 0; i < x.length; i++) {
-  selElmnt = x[i].getElementsByTagName("select")[0];
-  /*for each element, create a new DIV that will act as the selected item:*/
-  a = document.createElement("DIV");
-  a.setAttribute("class", "select-selected");
-  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-  x[i].appendChild(a);
-  /*for each element, create a new DIV that will contain the option list:*/
-  b = document.createElement("DIV");
-  b.setAttribute("class", "select-items select-hide");
-  for (j = 1; j < selElmnt.length; j++) {
-    /*for each option in the original select element,
-    create a new DIV that will act as an option item:*/
-    c = document.createElement("DIV");
-    c.innerHTML = selElmnt.options[j].innerHTML;
-    c.addEventListener("click", function(e) {
-        /*when an item is clicked, update the original select box,
-        and the selected item:*/
-        var y, i, k, s, h;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute("class");
-            }
-            this.setAttribute("class", "same-as-selected");
-            break;
-          }
-        }
-        h.click();
-    });
-    b.appendChild(c);
-  }
-  x[i].appendChild(b);
-  a.addEventListener("click", function(e) {
-      /*when the select box is clicked, close any other select boxes,
-      and open/close the current select box:*/
-      e.stopPropagation();
-      closeAllSelect(this);
-      this.nextSibling.classList.toggle("select-hide");
-      this.classList.toggle("select-arrow-active");
-    });
-}
-function closeAllSelect(elmnt) {
-  /*a function that will close all select boxes in the document,
-  except the current select box:*/
-  var x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
-  for (i = 0; i < y.length; i++) {
-    if (elmnt == y[i]) {
-      arrNo.push(i)
-    } else {
-      y[i].classList.remove("select-arrow-active");
-    }
-  }
-  for (i = 0; i < x.length; i++) {
-    if (arrNo.indexOf(i)) {
-      x[i].classList.add("select-hide");
-    }
-  }
-}
-/*if the user clicks anywhere outside the select box,
-then close all select boxes:*/
-document.addEventListener("click", closeAllSelect);
-</script>
+
 </body>
 </html>

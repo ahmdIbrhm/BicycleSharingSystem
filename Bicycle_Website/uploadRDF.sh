@@ -8,6 +8,7 @@ curl -X POST \
 end=`date +%s%3N`
 runtime=$((end-start))
 echo "Loading time: $runtime"
+rm -f $1
 
 
 

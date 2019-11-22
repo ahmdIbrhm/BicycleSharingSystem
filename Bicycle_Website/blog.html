@@ -43,55 +43,81 @@
 					<li>
 						<h4>Insert a new dataset</h4>
 						</p>
-						<table width="20%">
+						<table id="tableTagsStatic" width="100%">
 							<tr>
 								<td>
-									<select id="listTypeFile">
+									<select id="listTypeFileStatic">
+										<option value="noStatic" selected="selected">No static file</option>
 										<option value="json">JSON</option>
 										<option value="csv">CSV</option>
 										<option value="xml">XML</option>
 										<option value="other">Other</option>	
 									</select>
 								</td>
+								<td><input type="file" id="fileinput"/></td>
+							<tr>
+								<td>Station key:</td>
+								<td><input type="text" id="editTextKeyStatic"/></td>
 							</tr>
+							<tr>
+								<td>Station iterator:</td>
+								<td> <input type="text" id="editTextIteratorStatic"/></td>
+							</tr>
+							<tr>
+    							<td colspan="3"><hr/></td>
+  							</tr>
+  						</table>
+  						<table id="tableTagsAll" width="75%">
 							<tr>
 								<td>City name:</td>
 								<td><input type="text" id="editTextCityName"/></td>
 							</tr>
 							<tr>
-								<td><input type="file" id="fileinput"/></td>
+								<td>Dynamic data link:</td>
+								<td><input type="text" id="editTextDynamicDataLink"/></td>
 							</tr>
 							<tr>
-								<td>Key:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td>Link's file type:</td>
+								<td>
+									<select id="listTypeFileAll">
+										<option value="json">JSON</option>
+										<option value="csv">CSV</option>
+										<option value="xml">XML</option>
+									</select>
+								</td>
 							</tr>
 							<tr>
-								<td>Iterator:</td>
-								<td> <input type="text" id="editTextIterator"/></td>
-							</tr>
+									<td>Key Tag:</td>
+									<td><input type="text" id="editTextKeyAll"/></td>
+								</tr>
+								<tr>
+									<td>Iterator Tag:</td>
+									<td><input type="text" id="editTextIteratorAll"/></td>
+								</tr>
 						</table>
-
-						<h3>Mappings:</h3>
-						<table id="tableTags" width="50%">
+						<br>
+						<br>
+						<h4>Static mappings:</h4>
+						<table id="tableMappingsStatic" width="75%">
 							<tr>
 								<td>Id Tag:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td><input type="text" id="editTextIdTag"/></td>
 							</tr>
 							<tr>
 								<td>Name Tag:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td><input type="text" id="editTextNameTag"/></td>
 							</tr>
 							<tr>
 								<td>Capacity Tag:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td><input type="text" id="editTextCapacityTag"/></td>
 							</tr>
 							<tr>
 								<td>Latitude Tag:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td><input type="text" id="editTextLatTag"/></td>
 							</tr>
 							<tr>
 								<td>Longtitude Tag:</td>
-								<td><input type="text" id="editTextkey"/></td>
+								<td><input type="text" id="editTextLongTag"/></td>
 							</tr>
 							</table>
 							<table id="tableMapping" width="100%"></table>
@@ -136,7 +162,7 @@
 						</script>
 						<script type="text/javascript">
 							var buttonAddMapping="<button onclick='addMapping()'>Add another mapping</button>";
-							var row=document.getElementById("tableTags").insertRow(-1);
+							var row=document.getElementById("tableStaticTags").insertRow(-1);
 							var cellVirtual=row.insertCell(0);
 							var cell=row.insertCell(0);
 							cellVirtual.innerHTML="";
@@ -147,31 +173,8 @@
 						
 					</li>
 					<li>
-						<h4>Dynamic data</h4>
-							<table id="tableTags" width="50%">
-								<tr>
-									<td>Link for dynamic data:</td>
-									<td><input type="text" id="editTextDynamicDataLink"/></td>
-								</tr>
-								<tr>
-									<td>File type:</td>
-									<td>
-										<select id="listTypeFileDynamic">
-											<option value="json">JSON</option>
-											<option value="csv">CSV</option>
-											<option value="xml">XML</option>
-											<option value="other">Other</option>	
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Key Tag:</td>
-									<td><input type="text" id="editTextKeyDynamic"/></td>
-								</tr>
-								<tr>
-									<td>Iterator Tag:</td>
-									<td><input type="text" id="editTextIteratorDynamic"/></td>
-								</tr>
+						<h4>Dynamic Mapping:</h4>
+							<table id="tableTagsDynamic" width="50%">
 								<tr>
 									<td>Available Bicycles Tag:</td>
 									<td><input type="text" id="editTextAvailableBicyclesTag"/></td>
@@ -189,24 +192,33 @@
 						<script>
 							function sendInformation() 
 							{
+								var listTypeFileStatic = document.getElementById('listTypeFileStatic');
+								var typeOfFileStatic = listTypeFileStatic[listTypeFileStatic.selectedIndex].value;
+								var fileStatic = document.getElementById('fileinput').files[0];
+								var keyStatic = document.getElementById('editTextKeyStatic').value;
+								var iteratorStatic = document.getElementById('editTextIteratorStatic').value;
+
+								// Table to add mappings on runtime
 								var tableMapping = document.getElementById('tableMapping');
-								var tableTags=document.getElementById('tableTags');
 								var nbOfRows = tableMapping.rows.length;
-								
+
+								//table that contains the static mappings: id, name, capacity, lat, long
+								var tableMappingsStatic=document.getElementById('tableMappingsStatic');
+								var tagId=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
+								var tagName=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
+								var tagCapacity=tableMappingsStatic.rows[2].cells[1].childNodes[0].value;
+								var tagLatitude=tableMappingsStatic.rows[3].cells[1].childNodes[0].value;
+								var tagLongtitude=tableMappingsStatic.rows[4].cells[1].childNodes[0].value;
+
 								var cityName = document.getElementById('editTextCityName').value;
-								var listTypeFile = document.getElementById('listTypeFile');
-								var typeOfFile = listTypeFile[listTypeFile.selectedIndex].value;
-								var file = document.getElementById('fileinput').files[0];
-								var key = document.getElementById('editTextkey').value;
-								var iterator = document.getElementById('editTextIterator').value;
-
-								
-								var tagId=tableTags.rows[0].cells[1].childNodes[0].value;
-								var tagName=tableTags.rows[1].cells[1].childNodes[0].value;
-								var tagCapacity=tableTags.rows[2].cells[1].childNodes[0].value;
-								var tagLatitude=tableTags.rows[3].cells[1].childNodes[0].value;
-								var tagLongtitude=tableTags.rows[4].cells[1].childNodes[0].value;
-
+								var dynamicLinkAll=document.getElementById('editTextDynamicDataLink').value;
+								var listTypeFileAll = document.getElementById('listTypeFileAll');
+  								var typeOfFileAll=listTypeFileAll[listTypeFileAll.selectedIndex].value;
+  								var dynamicKeyAll=document.getElementById('editTextKeyAll').value;
+  								var dynamicIteratorAll=document.getElementById('editTextIteratorAll').value;
+				  				
+	
+								//define the properties used byour system							
 								var propertyId="http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 								var propertyName="http://www.w3.org/2000/01/rdf-schema#label";
 								var propertyCapacity="http://www.wikidata.org/prop/direct/P1083";
@@ -215,7 +227,7 @@
 								var propertyAvailableBicycles="http://www.example.org/availableBicycles";
 								var propertyAvailableDocks="http://www.example.org/availableDocks";
 
-								var arrayTags=[tagId,tagName,tagCapacity,tagLatitude,tagLongtitude];
+								var arrayTagsStatic=[tagId,tagName,tagCapacity,tagLatitude,tagLongtitude];
 								var arrayProperties=[propertyId,propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
 
 								var arrayMappings=[];
@@ -224,10 +236,10 @@
 								var mapping={"tag":tagId,"property":propertyId,"type":"uri","objectURI":"http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"};
 								arrayMappings.push(mapping);
 
-								//start from i=1 because propertyId should have objectURI!!! See above 
-								for(var i=1;i<arrayTags.length;i++)
+								// start from i=1 because propertyId should have objectURI!!! See above 
+								for(var i=1;i<arrayTagsStatic.length;i++)
 								{
-									var mapping={"tag":arrayTags[i],"property":arrayProperties[i],"type":"literal"};
+									var mapping={"tag":arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
 									arrayMappings.push(mapping);
 								}
 
@@ -240,41 +252,50 @@
 							      	var mapping={"tag":tag,"property":property,"type":type};
 							      	arrayMappings.push(mapping);
 							 	}
+
 							 	// alert(arrayMappings.length);
-							 	var staticParameters={"cityName":cityName,"typeOfFile":typeOfFile,"key":key,"iterator":iterator,"arrayMappings":arrayMappings};
-  								// var query="select ?s ?p ?o where {?s <http://www.w3.org/2000/01/rdf-schema#label> ?o .} limit 10"
-  								// var queryUrl = "http://localhost:3030/BicycleSharing/sparql?query=" + encodeURIComponent(query) + "&format=json";
-  								var staticOptions = JSON.stringify(staticParameters);
 
-
-  								//For dynamic data
-  								var listTypeFileDynamic = document.getElementById('listTypeFileDynamic');
-  								var typeOfFileDynamic=listTypeFile[listTypeFile.selectedIndex].value;
-  								var dynamicKey=document.getElementById('editTextKeyDynamic').value;
-  								var dynamicIterator=document.getElementById('editTextIteratorDynamic').value;
-  								var dynamicLink=document.getElementById('editTextDynamicDataLink').value;
-  								var dynamicAvailableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
-  								var dynamicAvailableDocks=document.getElementById('editTextAvailableDocksTag').value;
-
-  								// //add dynamic mappings to array
+							 	var availableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
+  								var availableDocks=document.getElementById('editTextAvailableDocksTag').value;
+  								var mappingAvailableBicycles={"tag":availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
+  								var mappingAvailableDocks={"tag":availableDocks,"property":propertyAvailableDocks,"type":"literal"};
   								var arrayMappingsDynamic=[];
-  								var mapping1={"tag":dynamicAvailableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
-  								var mapping2={"tag":dynamicAvailableDocks,"property":propertyAvailableDocks,"type":"literal"};
-  								arrayMappingsDynamic.push(mapping1);
-  								arrayMappingsDynamic.push(mapping2);
-  								var dynamicParameters={"linkFile":dynamicLink,"typeOfFile":typeOfFileDynamic,"key":dynamicKey,"iterator":dynamicIterator,"arrayMappings":arrayMappingsDynamic};
 
-  								var dynamicOptions=JSON.stringify(dynamicParameters);
-  								// alert(dynamicOptions);
 
   								var request = new XMLHttpRequest();
   								request.open("POST", "script.php");
-  								var formData = new FormData();
-								formData.append("file", file);
-								formData.append("staticOptions",staticOptions);
-								formData.append("dynamicOptions",dynamicOptions);
-  								request.send(formData);
 
+  								var formData = new FormData();
+
+  								var only1File=true;
+
+  								//when there is only 1 file
+							 	if(only1File==true)
+  								{
+  									arrayMappings.push(mappingAvailableBicycles);
+  									arrayMappings.push(mappingAvailableDocks);
+
+  									var allParameters={"linkFile":dynamicLinkAll, "cityName":cityName,"typeOfFile":typeOfFileAll,"key":dynamicKeyAll,"iterator":dynamicIteratorAll,"arrayMappings":arrayMappings};
+  									var allOptions = JSON.stringify(allParameters);
+  									formData.append("allOptions",allOptions);
+  								}
+  								else //more than 1 file
+  								{
+  									arrayMappingsDynamic.push(mappingAvailableBicycles);
+  									arrayMappingsDynamic.push(mappingAvailableDocks);
+
+  									var allParameters={"cityName":cityName,"typeOfFile":typeOfFileStatic,"key":keyStatic,"iterator":iteratorStatic,"arrayMappings":arrayMappings};
+
+  									var dynamicParameters={"linkFile":dynamicLinkAll,"typeOfFile":typeOfFileAll,"key":dynamicKeyAll,"iterator":dynamicIteratorAll,"arrayMappings":arrayMappingsDynamic};
+
+  									var staticOptions = JSON.stringify(allParameters);
+  									var dynamicOptions=JSON.stringify(dynamicParameters);
+  									formData.append("file", fileStatic);
+									formData.append("staticOptions",staticOptions);
+									formData.append("dynamicOptions",dynamicOptions);
+  								}
+
+  								request.send(formData);
   								request.onreadystatechange = function() {
 							        // Check if the request is compete and was successful
 							        // alert("Asd");
@@ -285,10 +306,6 @@
 							    	}
 							    	
 						    	};
-
-
-  								
-
 							}
 						</script>						
 					<li>

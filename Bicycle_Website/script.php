@@ -6,6 +6,7 @@ function convert_multi_array($array)
 }
 if (isset($_FILES['file']))
 {
+	echo "File founded";
 	$staticOptions=$_POST['staticOptions'];
 	$array= json_decode($staticOptions,true);
 
@@ -49,6 +50,7 @@ if (isset($_FILES['file']))
 }
 else
 {
+	echo "No file";
 	$allOptions=$_POST['allOptions'];
 	$array= json_decode($allOptions,true);
 

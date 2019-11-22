@@ -9,9 +9,9 @@
 <body>
 	<div id="header">
 		<div class="wrapper clearfix">
-			<div id="logo">
+			<!-- <div id="logo">
 				<a href="index.html"><img src="images/logo.png" alt="LOGO"></a>
-			</div>
+			</div> -->
 			<ul id="navigation">
 				<li>
 					<a href="index.html">Home</a>
@@ -38,20 +38,35 @@
 				</ul>
 			</div>
 			<div class="main">
-				<h1>Blog</h1>
+				<h1>Blog </h1>
 				<ul class="list">
 					<li>
+						
 						<h4>Insert a new dataset</h4>
 						</p>
-						<table id="tableTagsStatic" width="100%">
+						<input type="checkbox" id="checkboxStatic" value=off onclick="checkboxChanged()"> Separate file for static data<br>	
+						<script type="text/javascript">
+							function checkboxChanged()
+							{
+								var tableStaticTags=document.getElementById('tableTagsStatic');
+								var checkbox=document.getElementById('checkboxStatic')
+								if (checkbox.checked) 
+								{
+									tableStaticTags.style.visibility = "visible";
+							  	} 
+							  	else 
+							  	{
+							      	tableStaticTags.style.visibility = "hidden";
+							  	}
+							}
+						</script>
+						<table style="visibility:hidden" id="tableTagsStatic" width="100%">
 							<tr>
 								<td>
 									<select id="listTypeFileStatic">
-										<option value="noStatic" selected="selected">No static file</option>
 										<option value="json">JSON</option>
 										<option value="csv">CSV</option>
 										<option value="xml">XML</option>
-										<option value="other">Other</option>	
 									</select>
 								</td>
 								<td><input type="file" id="fileinput"/></td>
@@ -267,8 +282,17 @@
 
   								var formData = new FormData();
 
-  								var only1File=true;
-
+								var only1File=false;
+								
+								var checkbox=document.getElementById('checkboxStatic')
+								if (checkbox.checked) 
+								{
+							    	only1File=false;
+							  	} 
+							  	else 
+							  	{
+							  		only1File=true;
+							  	}
   								//when there is only 1 file
 							 	if(only1File==true)
   								{

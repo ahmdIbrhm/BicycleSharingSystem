@@ -73,6 +73,7 @@
     	var dynamicSelect = document.getElementById("dynamic_select");
 
     	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
+        
 
     	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

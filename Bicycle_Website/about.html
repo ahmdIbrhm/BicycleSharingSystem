@@ -60,14 +60,14 @@
 			</p>
 			<div>
 				<p style="font-size:120%;">
-					Start Date: <input type="date" name="start_date" id="start_date" />
+					Start Date: <input type="date" id="start_date" />
 				</p>
 				<p style="font-size:120%;">
-					End Date: <input type="date" name="end_date" id="end_date" />
+					End Date: <input type="date" id="end_date" />
 				</p>
 				
 			</div>
-			<input type="button" id="btn_render" value="Render results">
+			<input type="button" id="btn_render" onclick="renderResults()" value="Render results">
 			
 			<canvas id="myChart"></canvas>
 			<hr>
@@ -167,6 +167,44 @@
     					} ";
 		xhttp.send(query);
 
+	}
+	function renderResults(){
+		var start_date = new Date(document.getElementById("start_date").value);
+		var end_date = new Date(document.getElementById("end_date").value);
+
+		start_date = parseInt(start_date.getTime()/1000);
+		end_date = parseInt(end_date.getTime()/1000);
+
+		var xhttp = new XMLHttpRequest();
+    	xhttp.onreadystatechange = function() {
+    		if (this.readyState == 4 && this.status == 200) {
+
+    			var obj = JSON.parse(this.responseText);
+    			var results = obj.results;
+    			var bindings = results.bindings;
+    			var str = '';
+    			
+    			for (var i = 0; i < bindings.length; i++) {
+    				var obj = bindings[i];
+    				
+    				var av_bikes = obj['av_bikes'].value;
+    				var av_docks = obj['av_docks'].value;
+
+    			}
+    		}
+    	};
+
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	// must add station rdf:type Station ... in the model ...
+
+    	var selectedCity = document.getElementById("select_city").value;
+    	var selectedStation = document.getElementById("select_station").value;
+    	
+
+    	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> select ?av_bike ?av_docks where {<"+selectedStation+"> <http://www.schema.org/State> ?state; wdt:P276 <"+selectedCity+"> . ?state <http://www.example.org/time> ?time; <http://www.example.org/availableBicycles>  ?availableBicycles ; <http://www.example.org/availableDocks>  ?availableDocks. FILTER (?time >= \""+start_date+"\")FILTER (?time <= \""+end_date+"\") }";
+
+		xhttp.send(query);
 	}
 
 </script>

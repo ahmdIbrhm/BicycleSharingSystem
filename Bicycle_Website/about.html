@@ -127,7 +127,7 @@
 
     		}
     	};
-    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 
@@ -155,7 +155,7 @@
     		}
     	};
 
-    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	// must add station rdf:type Station ... in the model ...
 
@@ -191,7 +191,7 @@
     		}
     	};
 
-    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	// must add station rdf:type Station ... in the model ...
 

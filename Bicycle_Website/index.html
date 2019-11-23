@@ -75,7 +75,7 @@
     	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
         
 
-    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> SELECT ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks WHERE { ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; <http://www.w3.org/2000/01/rdf-schema#label> ?name ; wdt:P1083 ?capacity ; wdt:P276 <"+selected_city+">{ SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks) WHERE { ?station <http://www.schema.org/State> ?state . ?state <http://www.example.org/time> ?date ; <http://www.example.org/availableBicycles> ?availableBicycles ; <http://www.example.org/availableDocks> ?availableDocks; } group by ?station } }";
 
@@ -124,7 +124,7 @@
 
     		}
     	};
-    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 

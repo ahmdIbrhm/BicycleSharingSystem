@@ -1,0 +1,16 @@
+<http://www.w3.org/2003/01/geo/wgs84_pos#long>
+<http://www.example.org/iteratorTag> 
+<http://www.example.org/time> 
+<http://www.w3.org/2000/01/rdf-schema#label> 
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 
+<http://schema.org/Property> 
+<http://www.example.org/allMappings> 
+<http://www.wikidata.org/prop/direct/P2699>
+<http://www.example.org/availableDocks> 
+<http://www.example.org/availableBicycles> 
+<http://www.wikidata.org/prop/direct/P276> 
+<http://www.schema.org/State> 
+<http://www.wikidata.org/prop/direct/P1083> 
+<http://www.example.org/keyTag> 
+<http://www.w3.org/2003/01/geo/wgs84_pos#lat> 
+<http://www.example.org/fileType> 

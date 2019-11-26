@@ -58,7 +58,7 @@
     				var seconds = parseInt(new Date().getTime() / 1000);
     				var update_time = seconds - unix_timestamp;
 
- 	 				L.marker([lat_value, lon_value ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> name: '+name+'<br/><h3>capacity:'+capacity+'</h3><h3>av_bikes: '+av_bikes+'<image src="images/dock.png" width="60" height="30"></h3>'+'<br/>av_docks: '+av_docks+'<image src="images/dock.png" width="60" height="30">'+'<br/>last updated: '+update_time+'s ago');
+ 	 				L.marker([lat_value, lon_value ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> <b>Station name</b>: '+name+'<br/><b>capacity</b>:'+capacity+'<br/><b>av_bikes</b>: '+av_bikes+'<br/> <b>av_docks</b>: '+av_docks+'<br/>last updated: '+update_time+'s ago');
  	 				center_lat += parseFloat(lat_value);
  	 				center_lon += parseFloat(lon_value);
  	 				counter++;
@@ -75,7 +75,7 @@
     	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
         
 
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> SELECT ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks WHERE { ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; <http://www.w3.org/2000/01/rdf-schema#label> ?name ; wdt:P1083 ?capacity ; wdt:P276 <"+selected_city+">{ SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks) WHERE { ?station <http://www.schema.org/State> ?state . ?state <http://www.example.org/time> ?date ; <http://www.example.org/availableBicycles> ?availableBicycles ; <http://www.example.org/availableDocks> ?availableDocks; } group by ?station } }";
 
@@ -124,7 +124,7 @@
 
     		}
     	};
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 
@@ -160,7 +160,7 @@
                     <a href="index.html">Map</a>
                 </li>
                 <li>
-                    <a href="Statistics.html">Statistics</a>
+                    <a href="about.html">Statistics</a>
                 </li>
                 <li >
                     <a href="blog.html">Add Cities</a>

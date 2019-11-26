@@ -28,7 +28,7 @@
 					<a href="index.html">Map</a>
 				</li>
 				<li class="selected">
-					<a href="Statistics.html">Statistics</a>
+					<a href="about.html">Statistics</a>
 				</li>
 				<li >
 					<a href="blog.html">Add Cities</a>
@@ -75,33 +75,36 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
-	function load(){
+	function load(avBikesData,avDocksData,labels){
 
 	var ctx = document.getElementById("myChart").getContext('2d');
+	
+	console.log(avBikesData)
+	console.log(avDocksData)
 	var mychart = new Chart(ctx,{
 		"type":"line",
 		"data":{
-		"labels":["January","February","March","April","May","June","July"],
+		"labels":labels,
 		"datasets":[{
 		"label":"Available bikes",
-		"data":[65,59,80,81,56,55,40],
+		"data":avBikesData,
 		"fill":false,
 		"borderColor":"rgb(75, 192, 192)",
 		"lineTension":0.1},
 		{
 		"label":"Available docks",
-		"data":[22,88,11,4,45,98,52],
+		"data":avDocksData,
 		"fill":false,
 		"borderColor":"rgb(75, 100, 192)",
 		"lineTension":0.1}
 		]},
 		"options":{}
 	}); 
-	}
+}
 
-
-	function init(){
+function init(){
     
     var dynamicSelect = document.getElementById("select_city");
    	var xhttp = new XMLHttpRequest();
@@ -122,12 +125,12 @@
     				dynamicSelect.innerHTML += "<option value=\""+uri+"\" >"+name+"</option>";
 
     			}
-    			load();
+    			load([],[],[]);
     			selectCityListener();
 
     		}
     	};
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 
@@ -144,6 +147,7 @@
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
+    			dynamicSelect.innerHTML = "";
     			for (var i = 0; i < bindings.length; i++) {
     				var obj = bindings[i];
     				
@@ -155,7 +159,7 @@
     		}
     	};
 
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	// must add station rdf:type Station ... in the model ...
 
@@ -166,42 +170,53 @@
 
 	}
 	function renderResults(){
-		var start_date = new Date(document.getElementById("start_date").value);
-		var end_date = new Date(document.getElementById("end_date").value);
+		
+		if(document.getElementById("start_date").value == "" || document.getElementById("end_date").value == ""){
+			swal("Error!", "Choose start and end date!", "error");
+		}else{
+			var start_date = new Date(document.getElementById("start_date").value);
+			var end_date = new Date(document.getElementById("end_date").value);
 
-		start_date = parseInt(start_date.getTime()/1000);
-		end_date = parseInt(end_date.getTime()/1000);
+			start_date = parseInt(start_date.getTime()/1000);
+			end_date = parseInt(end_date.getTime()/1000);
 
-		var xhttp = new XMLHttpRequest();
-    	xhttp.onreadystatechange = function() {
-    		if (this.readyState == 4 && this.status == 200) {
+			var xhttp = new XMLHttpRequest();
+	    	xhttp.onreadystatechange = function() {
+	    		if (this.readyState == 4 && this.status == 200) {
 
-    			var obj = JSON.parse(this.responseText);
-    			var results = obj.results;
-    			var bindings = results.bindings;
-    			var str = '';
-    			
-    			for (var i = 0; i < bindings.length; i++) {
-    				var obj = bindings[i];
-    				
-    				var av_bikes = obj['av_bikes'].value;
-    				var av_docks = obj['av_docks'].value;
+	    			var obj = JSON.parse(this.responseText);
+	    			var results = obj.results;
+	    			var bindings = results.bindings;
+	    			var str = '';
+	    			var avBikesData = []
+	    			var avDocksData = []
+	    			var labels = []
+	    			for (var i = 0; i < bindings.length; i++) {
+	    				var obj = bindings[i];
+	    				
+	    				var av_bikes = obj['av_bikes'].value;
+	    				var av_docks = obj['av_docks'].value;
+	    				var time = obj['time'].value;
+	    				avBikesData.push(av_bikes)
+	    				avDocksData.push(av_docks)
+	    				labels.push(time)
+	    			}
+	    			load(avBikesData,avDocksData,labels)
+	    		}
+	    	};
 
-    			}
-    		}
-    	};
+	    	xhttp.open("POST", "http://localhost:3030/test/query", true);
+	    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    	// must add station rdf:type Station ... in the model ...
 
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
-    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    	// must add station rdf:type Station ... in the model ...
+	    	var selectedCity = document.getElementById("select_city").value;
+	    	var selectedStation = document.getElementById("select_station").value;
+	    
 
-    	var selectedCity = document.getElementById("select_city").value;
-    	var selectedStation = document.getElementById("select_station").value;
-    	
+	    	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> select ?av_bikes ?av_docks ?time where {<"+selectedStation+"> <http://www.schema.org/State> ?state; wdt:P276 <"+selectedCity+"> . ?state <http://www.example.org/time> ?time; <http://www.example.org/availableBicycles>  ?av_bikes ; <http://www.example.org/availableDocks>  ?av_docks. FILTER (?time >= \""+start_date+"\")FILTER (?time <= \""+end_date+"\") }";
 
-    	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> select ?av_bike ?av_docks where {<"+selectedStation+"> <http://www.schema.org/State> ?state; wdt:P276 <"+selectedCity+"> . ?state <http://www.example.org/time> ?time; <http://www.example.org/availableBicycles>  ?availableBicycles ; <http://www.example.org/availableDocks>  ?availableDocks. FILTER (?time >= \""+start_date+"\")FILTER (?time <= \""+end_date+"\") }";
-
-		xhttp.send(query);
+			xhttp.send(query);
+		}	
 	}
 
 </script>

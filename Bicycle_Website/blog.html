@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Blog - Astronomy Website Template</title>
+	<title>Add Cities</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
@@ -17,7 +17,7 @@
 					<a href="index.html">Map</a>
 				</li>
 				<li>
-					<a href="Statistics.html">Statistics</a>
+					<a href="about.html">Statistics</a>
 				</li>
 				<li class="selected">
 					<a href="blog.html">Add Cities</a>
@@ -31,54 +31,20 @@
 	<div id="contents">
 		<div class="wrapper clearfix">
 			<div id="sidebar">
-				<ul>
-				</ul>
 			</div>
-			<div class="main">
-				<h1>Blog </h1>
+		</div>
+	</div>
+	<div id="footer">
+		<div class="wrapper clearfix">
+
+
+<h1>Add Cities </h1>
 				<ul class="list">
 					<li>
 						
-						<h4>Insert a new dataset</h4>
+						<h3>Insert a new dataset</h3>
 						</p>
-						<input type="checkbox" id="checkboxStatic" value=off onclick="checkboxChanged()"> Separate file for static data<br>	
-						<script type="text/javascript">
-							function checkboxChanged()
-							{
-								var tableStaticTags=document.getElementById('tableTagsStatic');
-								var checkbox=document.getElementById('checkboxStatic')
-								if (checkbox.checked) 
-								{
-									tableStaticTags.style.visibility = "visible";
-							  	} 
-							  	else 
-							  	{
-							      	tableStaticTags.style.visibility = "hidden";
-							  	}
-							}
-						</script>
-						<table style="visibility:hidden" id="tableTagsStatic" width="100%">
-							<tr>
-								<td>
-									<select id="listTypeFileStatic">
-										<option value="json">JSON</option>
-										<option value="csv">CSV</option>
-										<option value="xml">XML</option>
-									</select>
-								</td>
-								<td><input type="file" id="fileinput"/></td>
-							<tr>
-								<td>Station key:</td>
-								<td><input type="text" id="editTextKeyStatic"/></td>
-							</tr>
-							<tr>
-								<td>Station iterator:</td>
-								<td> <input type="text" id="editTextIteratorStatic"/></td>
-							</tr>
-							<tr>
-    							<td colspan="3"><hr/></td>
-  							</tr>
-  						</table>
+						
   						<table id="tableTagsAll" width="75%">
 							<tr>
 								<td>City name:</td>
@@ -99,42 +65,56 @@
 								</td>
 							</tr>
 							<tr>
-									<td>Key Tag:</td>
+									<td>Path of station id: </td>
 									<td><input type="text" id="editTextKeyAll"/></td>
 								</tr>
 								<tr>
-									<td>Iterator Tag:</td>
+									<td>Name of array of stations:</td>
 									<td><input type="text" id="editTextIteratorAll"/></td>
 								</tr>
 						</table>
-						<br>
-						<br>
-						<h4>Static mappings:</h4>
+						<hr>
+						<h3>Static mappings:</h3>
 						<table id="tableMappingsStatic" width="75%">
 							<tr>
-								<td>Id Tag:</td>
+								<td>Id:</td>
 								<td><input type="text" id="editTextIdTag"/></td>
 							</tr>
 							<tr>
-								<td>Name Tag:</td>
+								<td>Name:</td>
 								<td><input type="text" id="editTextNameTag"/></td>
 							</tr>
 							<tr>
-								<td>Capacity Tag:</td>
+								<td>Capacity:</td>
 								<td><input type="text" id="editTextCapacityTag"/></td>
 							</tr>
 							<tr>
-								<td>Latitude Tag:</td>
+								<td>Latitude:</td>
 								<td><input type="text" id="editTextLatTag"/></td>
 							</tr>
 							<tr>
-								<td>Longtitude Tag:</td>
+								<td>Longtitude:</td>
 								<td><input type="text" id="editTextLongTag"/></td>
 							</tr>
 							</table>
 							<table id="tableMapping" width="100%"></table>
-
-						<script>
+						
+						<hr>
+						<h3>Dynamic Mapping:</h3>
+						<table id="tableTagsDynamic" width="88%">
+							<tr>
+								<td>Available Bicycles:</td>
+								<td><input type="text" id="editTextAvailableBicyclesTag"/></td>
+							</tr>
+							<tr>
+								<td>Available Docks:</td>
+								<td><input type="text" id="editTextAvailableDocksTag"/></td>
+							</tr>
+						</table>
+						<br>
+						<input type="checkbox" id="checkboxStatic" value=off onclick="checkboxChanged()"> Separate file for static data<br>	
+					</li>
+							<script>
 							function addMapping() 
 							{
 								var labelTag='<label>Tag: </label>';
@@ -181,26 +161,121 @@
 							cell.innerHTML=buttonAddMapping;
 							// cell.colSpan=2;
 						</script>
+						<script type="text/javascript">
+							function checkboxChanged()
+							{
+								var tableStaticTags=document.getElementById('tableTagsStatic');
+								var checkbox=document.getElementById('checkboxStatic')
+								if (checkbox.checked) 
+								{
+									tableStaticTags.style.visibility = "visible";
+							  	} 
+							  	else 
+							  	{
+							      	tableStaticTags.style.visibility = "hidden";
+							  	}
+							}
+						</script>
+						<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> -->
+					    <!-- <script type="text/javascript"> 
+							 //    function addStaticData()
+							 //    {
+							 //        (async () => {
 
+								// 	const { value: file } = await Swal.fire({
+								// 	  title: 'Add Static Data',
+								// 	  input: 'file',
+								// 	  showCancelButton: true,
+								// 	  html:
+
+								// 	    // '<input id="swal-input1" class="swal2-input">' ,
+								// 	    // '<input id="swal-input2" class="swal2-input">',
+								// 	'<select id="listTypeFileStatic"  class="swal2-input" >'+
+								// 		'<option value="json">JSON</option>'+
+								// 		'<option value="csv">CSV</option>'+
+								// 		'<option value="xml">XML</option>'+
+								// 	'</select><br>'+
+								// 	'<table> <tr> <td><label class="swal2-input"> Station key:</label></td> '+
+								// 	'<td><input type="text" id="editTextKeyStatic"/></td></tr>'+
+
+								// 	'<tr><td><label class="swal2-input"> Station Iterator:</label></td> '+
+								// 	'<td><input type="text" id="editTextIteratorStatic"/></td></tr>',
+								// })
+
+									// if (file) {
+										// var listTypeFileStatic = document.getElementById('listTypeFileStatic');
+										// var typeOfFileStatic = listTypeFileStatic[listTypeFileStatic.selectedIndex].value;
+										// alert(typeOfFileStatic);
+										// var keyStatic = document.getElementById('editTextKeyStatic').value;
+										// var iteratorStatic = document.getElementById('editTextIteratorStatic').value;
+
+
+									  // const reader = new FileReader()
+									  // reader.onload = (e) => {
+									  //   Swal.fire({
+
+									  //     // alert(e.target.result)
+									  //     title: 'Ahmd',
+									  //     imageUrl: e.target.result,
+									  //     imageAlt: 'The uploaded picture'
+									  //   })
+									  // }
+									  // reader.readAsDataURL(file)
+									// }
+
+									// })()
+
+
+
+									// (async () => {
+
+									// const { value: formValues } = await Swal.fire({
+									//   title: 'Multiple inputs',
+									//   html:
+									//     '<input id="swal-input1" class="swal2-input">' +
+									//     '<input id="swal-input2" class="swal2-input">',
+									//   focusConfirm: false,
+									//   preConfirm: () => {
+									//     return [
+									//       document.getElementById('swal-input1').value,
+									//       document.getElementById('swal-input2').value
+									//     ]
+									//   }
+									// })
+
+									// if (formValues) {
+									//   Swal.fire(JSON.stringify(formValues))
+									// }
+
+									// })()
+					    		} -->
+					  </script>
+						<table style="visibility:hidden" id="tableTagsStatic" width="100%">
+							<tr>
+								<td>
+									<select id="listTypeFileStatic">
+										<option value="json">JSON</option>
+										<option value="csv">CSV</option>
+										<option value="xml">XML</option>
+									</select>
+								</td>
+								<td><input type="file" id="fileinput"/></td>
+							<tr>
+								<td>Station key:</td>
+								<td><input type="text" id="editTextKeyStatic"/></td>
+							</tr>
+							<tr>
+								<td>Station iterator:</td>
+								<td> <input type="text" id="editTextIteratorStatic"/></td>
+							</tr>
+							<tr>
+    							<td colspan="3"><hr/></td>
+  							</tr>
+  						</table>
+  						<!-- <input type="button" onclick="addStaticData()" value="Add static data"> -->
+						<input type="submit" onclick="sendInformation()" value="Send information">
 						
-					</li>
-					<li>
-						<h4>Dynamic Mapping:</h4>
-							<table id="tableTagsDynamic" width="50%">
-								<tr>
-									<td>Available Bicycles Tag:</td>
-									<td><input type="text" id="editTextAvailableBicyclesTag"/></td>
-								</tr>
-								<tr>
-									<td>Available Docks Tag:</td>
-									<td><input type="text" id="editTextAvailableDocksTag"/></td>
-								</tr>
-							</table>
 
-
-					</li>
-					<input type="submit" onclick="sendInformation()" value="Send information">
-						
 						<script>
 							function sendInformation() 
 							{
@@ -245,13 +320,13 @@
 								var arrayMappings=[];
 
 								//put the type of the station as a spacial thing
-								var mapping={"tag":tagId,"property":propertyId,"type":"uri","objectURI":"http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"};
+								var mapping={"tag":"\."+tagId,"property":propertyId,"type":"uri","objectURI":"http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"};
 								arrayMappings.push(mapping);
 
 								// start from i=1 because propertyId should have objectURI!!! See above 
 								for(var i=1;i<arrayTagsStatic.length;i++)
 								{
-									var mapping={"tag":arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
+									var mapping={"tag":"\."+arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
 									arrayMappings.push(mapping);
 								}
 
@@ -261,7 +336,7 @@
 							      	var tag=row.cells[1].childNodes[0].value;
 							      	var property=row.cells[3].childNodes[0].value;
 							      	var type=row.cells[5].childNodes[0].value;
-							      	var mapping={"tag":tag,"property":property,"type":type};
+							      	var mapping={"tag":"\."+tag,"property":property,"type":type};
 							      	arrayMappings.push(mapping);
 							 	}
 
@@ -269,8 +344,8 @@
 
 							 	var availableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
   								var availableDocks=document.getElementById('editTextAvailableDocksTag').value;
-  								var mappingAvailableBicycles={"tag":availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
-  								var mappingAvailableDocks={"tag":availableDocks,"property":propertyAvailableDocks,"type":"literal"};
+  								var mappingAvailableBicycles={"tag":"\."+availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
+  								var mappingAvailableDocks={"tag":"\."+availableDocks,"property":propertyAvailableDocks,"type":"literal"};
   								var arrayMappingsDynamic=[];
 
 
@@ -330,124 +405,10 @@
 							}
 						</script>						
 					<li>
-						<h4>Blog Title One</h4>
-						<p>
-							This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your 
-							own text.This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with 
-							your own text.
-						</p>
-						<a href="blog.html" class="more">Read more&gt;&gt;</a>
+						<br>
 					</li>
 				</ul>
-				<ul class="pagination">
-					<li>
-						<a href="blog.html">&lt;&lt;</a>
-					</li>
-					<li>
-						<a href="blog.html">First</a>
-					</li>
-					<li class="selected">
-						<a href="blog.html">1</a>
-					</li>
-					<li>
-						<a href="blog.html">2</a>
-					</li>
-					<li>
-						<a href="blog.html">3</a>
-					</li>
-					<li>
-						<a href="blog.html">4</a>
-					</li>
-					<li>
-						<a href="blog.html">5</a>
-					</li>
-					<li>
-						<a href="blog.html">6</a>
-					</li>
-					<li>
-						<a href="blog.html">7</a>
-					</li>
-					<li>
-						<a href="blog.html">8</a>
-					</li>
-					<li>
-						<a href="blog.html">9</a>
-					</li>
-					<li>
-						<a href="blog.html">10</a>
-					</li>
-					<li>
-						<a href="blog.html">11</a>
-					</li>
-					<li>
-						<a href="blog.html">12</a>
-					</li>
-					<li>
-						<a href="blog.html">13</a>
-					</li>
-					<li>
-						<a href="blog.html">14</a>
-					</li>
-					<li>
-						<a href="blog.html">15</a>
-					</li>
-					<li>
-						<a href="blog.html">16</a>
-					</li>
-					<li>
-						<a href="blog.html">17</a>
-					</li>
-					<li>
-						<a href="blog.html">18</a>
-					</li>
-					<li>
-						<a href="blog.html">19</a>
-					</li>
-					<li>
-						<a href="blog.html">20</a>
-					</li>
-					<li>
-						<a href="blog.html">Last</a>
-					</li>
-					<li>
-						<a href="blog.html">&gt;&gt;</a>
-					</li>
-				</ul>
-				<!-- /.pagination -->
 			</div>
-		</div>
-	</div>
-	<div id="footer">
-		<ul id="featured" class="wrapper clearfix">
-			<li>
-				<img src="images/astronaut.jpg" alt="Img" height="204" width="220">
-				<h3><a href="blog.html">Category 1</a></h3>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec mi tortor. Phasellus commodo semper vehicula.
-				</p>
-			</li>
-			<li>
-				<img src="images/earth.jpg" alt="Img" height="204" width="220">
-				<h3><a href="blog.html">Category 2</a></h3>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec mi tortor. Phasellus commodo semper vehicula.
-				</p>
-			</li>
-			<li>
-				<img src="images/spacecraft-small.jpg" alt="Img" height="204" width="220">
-				<h3><a href="blog.html">Category 3</a></h3>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec mi tortor. Phasellus commodo semper vehicula.
-				</p>
-			</li>
-			<li>
-				<img src="images/space-shuttle.jpg" alt="Img" height="204" width="220">
-				<h3><a href="blog.html">Category 4</a></h3>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec mi tortor. Phasellus commodo semper vehicula.
-				</p>
-			</li>
-		</ul>
 		<div class="body">
 			<div class="wrapper clearfix">
 				<div id="links">

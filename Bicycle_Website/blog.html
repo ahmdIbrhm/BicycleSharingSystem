@@ -76,10 +76,10 @@
 						<hr>
 						<h3>Static mappings:</h3>
 						<table id="tableMappingsStatic" width="75%">
-							<tr>
+							<!-- <tr>
 								<td>Id:</td>
 								<td><input type="text" id="editTextIdTag"/></td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td>Name:</td>
 								<td><input type="text" id="editTextNameTag"/></td>
@@ -291,11 +291,11 @@
 
 								//table that contains the static mappings: id, name, capacity, lat, long
 								var tableMappingsStatic=document.getElementById('tableMappingsStatic');
-								var tagId=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
-								var tagName=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
-								var tagCapacity=tableMappingsStatic.rows[2].cells[1].childNodes[0].value;
-								var tagLatitude=tableMappingsStatic.rows[3].cells[1].childNodes[0].value;
-								var tagLongtitude=tableMappingsStatic.rows[4].cells[1].childNodes[0].value;
+								// var tagId=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
+								var tagName=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
+								var tagCapacity=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
+								var tagLatitude=tableMappingsStatic.rows[2].cells[1].childNodes[0].value;
+								var tagLongtitude=tableMappingsStatic.rows[3].cells[1].childNodes[0].value;
 
 								var cityName = document.getElementById('editTextCityName').value;
 								var dynamicLinkAll=document.getElementById('editTextDynamicDataLink').value;
@@ -306,7 +306,6 @@
 				  				
 	
 								//define the properties used byour system							
-								var propertyId="http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 								var propertyName="http://www.w3.org/2000/01/rdf-schema#label";
 								var propertyCapacity="http://www.wikidata.org/prop/direct/P1083";
 								var propertyLatitude="http://www.w3.org/2003/01/geo/wgs84_pos#lat";
@@ -314,19 +313,15 @@
 								var propertyAvailableBicycles="http://www.example.org/availableBicycles";
 								var propertyAvailableDocks="http://www.example.org/availableDocks";
 
-								var arrayTagsStatic=[tagId,tagName,tagCapacity,tagLatitude,tagLongtitude];
-								var arrayProperties=[propertyId,propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
+								var arrayTagsStatic=[tagName,tagCapacity,tagLatitude,tagLongtitude];
+								var arrayProperties=[propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
 
 								var arrayMappings=[];
 
-								//put the type of the station as a spacial thing
-								var mapping={"tag":"\."+tagId,"property":propertyId,"type":"uri","objectURI":"http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"};
-								arrayMappings.push(mapping);
-
 								// start from i=1 because propertyId should have objectURI!!! See above 
-								for(var i=1;i<arrayTagsStatic.length;i++)
+								for(var i=0;i<arrayTagsStatic.length;i++)
 								{
-									var mapping={"tag":"\."+arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
+									var mapping={"tag":"\\\."+arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
 									arrayMappings.push(mapping);
 								}
 
@@ -336,7 +331,7 @@
 							      	var tag=row.cells[1].childNodes[0].value;
 							      	var property=row.cells[3].childNodes[0].value;
 							      	var type=row.cells[5].childNodes[0].value;
-							      	var mapping={"tag":"\."+tag,"property":property,"type":type};
+							      	var mapping={"tag":"\\\."+tag,"property":property,"type":type};
 							      	arrayMappings.push(mapping);
 							 	}
 
@@ -344,8 +339,8 @@
 
 							 	var availableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
   								var availableDocks=document.getElementById('editTextAvailableDocksTag').value;
-  								var mappingAvailableBicycles={"tag":"\."+availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
-  								var mappingAvailableDocks={"tag":"\."+availableDocks,"property":propertyAvailableDocks,"type":"literal"};
+  								var mappingAvailableBicycles={"tag":"\\\."+availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
+  								var mappingAvailableDocks={"tag":"\\\."+availableDocks,"property":propertyAvailableDocks,"type":"literal"};
   								var arrayMappingsDynamic=[];
 
 

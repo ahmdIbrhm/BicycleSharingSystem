@@ -323,12 +323,13 @@
 						<input type="submit" onclick="sendInformation()" value="Send information">
 						
 						<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 						<script>
 							function sendInformation()
 							{
 								Swal.fire({
-								  title: 'Auto close alert!',
-								  html: 'I will close in <b></b> milliseconds.',
+								  title: 'Loading Data!',
+								  html: 'magic is happening please wait...',
 								  // timer: 2000,
 								  // timerProgressBar: true,
 								  onOpen: () => {
@@ -342,10 +343,10 @@
 								  },
 								  onClose: () => {
 								  	console.log("onClose");
-								    clearInterval(timerInterval)
 								  }
 								}).then((result)=> {
-									console.log("result")
+									//console.log("result")
+
 								})
 							}
 
@@ -466,6 +467,12 @@
 							        // alert("Status: "+this.status);
 							        if(this.readyState === 4 && this.status === 200) {
 							        	console.log("In 200 ok")
+							        	Swal.close()
+							        	Swal.fire(
+											  'Finished !',
+											  'Loading finished successfuly!',
+											  'success'
+										)
 							        	// alert(this.	responseText);
 							    	}
 						    	};

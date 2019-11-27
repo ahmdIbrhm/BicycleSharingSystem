@@ -13,21 +13,22 @@
 				<a href="index.html"><img src="images/logo.png" alt="LOGO"></a>
 			</div> -->
 			<ul id="navigation">
-				<li>
-					<a href="index.html">Map</a>
-				</li>
-				<li>
-					<a href="about.html">Statistics</a>
-				</li>
+				<li >
+                    <a href="index.html">Home</a>
+                </li>
 				<li class="selected">
-					<a href="blog.html">Add Cities</a>
-				</li>
-				<li>
-					<a href="documentation.html">Documentation</a>
-				</li>
-				<li>
-					<a href="contact.html">Contact Us</a>
-				</li>
+                    <a href="blog.html">Add Cities</a>
+                </li>
+                <li >
+                    <a href="map.html">Map</a>
+                </li>
+                <li>
+                    <a href="about.html">Statistics</a>
+                </li>
+                
+                <li>
+                    <a href="contact.html">Contact Us</a>
+                </li>
 			</ul>
 		</div>
 	</div>
@@ -466,6 +467,9 @@
 							        // alert("Ready state: "+this.readyState);
 							        // alert("Status: "+this.status);
 							        if(this.readyState === 4 && this.status === 200) {
+
+							        	// add conditions on this.responseText if
+							        	// loading was successful or not (depends on the return of the function) 
 							        	console.log("In 200 ok")
 							        	Swal.close()
 							        	Swal.fire(

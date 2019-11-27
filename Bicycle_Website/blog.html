@@ -127,20 +127,35 @@
 									    var reader = new FileReader();
 									    reader.readAsText(file, "UTF-8");
 									    reader.onload = function (evt) {
-									        console.log(evt.target.result);
+									        // console.log(evt.target.result);
         									var jsonObject=JSON.parse(evt.target.result);
-        									var cityName=jsonObject.cityName.value;
-											var dynamicDataLink=jsonObject.dynamicDataLink.value;
-											var fileType=jsonObject.fileType.value;
-											var pathId=jsonObject.pathId.value;
-											var pathStation=jsonObject.pathStation.value;
-											var name=jsonObject.name.value;
-											var capacity=jsonObject.capacity.value;
-											var lat=jsonObject.lat.value;
-											var long=jsonObject.long.value;
-											var availableBicycles=jsonObject.availableBicycles.value;
-											var availableDocks=jsonObject.availableDocks.value;
+        									var cityName=jsonObject.cityName;
+        									console.log(cityName);	
+											var dynamicDataLink=jsonObject.dynamicDataLink;
+											var fileType=jsonObject.fileType;
+											var pathId=jsonObject.pathId;
+											var pathStation=jsonObject.pathStation;
+											var name=jsonObject.name;
+											var capacity=jsonObject.capacity;
+											var lat=jsonObject.lat;
+											var long=jsonObject.long;
+											var availableBicycles=jsonObject.availableBicycles;
+											var availableDocks=jsonObject.availableDocks;
 
+											document.getElementById('editTextCityName').value=cityName;
+											document.getElementById('editTextDynamicDataLink').value=dynamicDataLink;
+											var listTypeFileAll= document.getElementById('listTypeFileAll');
+			  								listTypeFileAll.value=fileType;
+			  								document.getElementById('editTextKeyAll').value = pathId;
+			  								document.getElementById('editTextIteratorAll').value = pathStation;
+
+
+			  								document.getElementById('editTextNameTag').value = name;
+			  								document.getElementById('editTextCapacityTag').value = capacity;
+			  								document.getElementById('editTextLatTag').value = lat;
+			  								document.getElementById('editTextLongTag').value = long;
+			  								document.getElementById('editTextAvailableBicyclesTag').value = availableBicycles;
+			  								document.getElementById('editTextAvailableDocksTag').value = availableDocks;
 									    }
 									    reader.onerror = function (evt) {
 									        console.log("error reading file");
@@ -293,11 +308,11 @@
 								</td>
 								<td><input type="file" id="fileinput"/></td>
 							<tr>
-								<td>Station key:</td>
+								<td>Path of station id:</td>
 								<td><input type="text" id="editTextKeyStatic"/></td>
 							</tr>
 							<tr>
-								<td>Station iterator:</td>
+								<td>Path of array of stations:</td>
 								<td> <input type="text" id="editTextIteratorStatic"/></td>
 							</tr>
 							<tr>
@@ -307,9 +322,34 @@
   						<!-- <input type="button" onclick="addStaticData()" value="Add static data"> -->
 						<input type="submit" onclick="sendInformation()" value="Send information">
 						
-
+						<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 						<script>
-							function sendInformation() 
+							function sendInformation()
+							{
+								Swal.fire({
+								  title: 'Auto close alert!',
+								  html: 'I will close in <b></b> milliseconds.',
+								  // timer: 2000,
+								  // timerProgressBar: true,
+								  onOpen: () => {
+								    Swal.showLoading()
+								    sendHttp()
+								    console.log("onOpen");
+								    // timerInterval = setInterval(() => {
+								    //   Swal.getContent().querySelector('b')
+								    //     .textContent = Swal.getTimerLeft()
+								    // }, 100)
+								  },
+								  onClose: () => {
+								  	console.log("onClose");
+								    clearInterval(timerInterval)
+								  }
+								}).then((result)=> {
+									console.log("result")
+								})
+							}
+
+							function sendHttp() 
 							{
 								var listTypeFileStatic = document.getElementById('listTypeFileStatic');
 								var typeOfFileStatic = listTypeFileStatic[listTypeFileStatic.selectedIndex].value;
@@ -375,7 +415,6 @@
   								var mappingAvailableDocks={"tag":"\\\."+availableDocks,"property":propertyAvailableDocks,"type":"literal"};
   								var arrayMappingsDynamic=[];
 
-
   								var request = new XMLHttpRequest();
   								request.open("POST", "script.php");
 
@@ -419,15 +458,16 @@
   								}
 
   								request.send(formData);
+								
   								request.onreadystatechange = function() {
 							        // Check if the request is compete and was successful
 							        // alert("Asd");
 							        // alert("Ready state: "+this.readyState);
 							        // alert("Status: "+this.status);
 							        if(this.readyState === 4 && this.status === 200) {
-							        	alert(this.	responseText);
+							        	console.log("In 200 ok")
+							        	// alert(this.	responseText);
 							    	}
-							    	
 						    	};
 							}
 						</script>						

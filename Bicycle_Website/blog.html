@@ -44,7 +44,8 @@
 <h1>Add Cities </h1>
 				<ul class="list">
 					<li>
-						
+						Insert Config file (optional):
+						<input type="file" id="configFile" onchange="addConfigFile()"></input>
 						<h3>Insert a new dataset</h3>
 						</p>
 						
@@ -118,40 +119,68 @@
 						<input type="checkbox" id="checkboxStatic" value=off onclick="checkboxChanged()"> Separate file for static data<br>	
 					</li>
 							<script>
-							function addMapping() 
-							{
-								var labelTag='<label>Tag: </label>';
-								var editTextTag='<input type="text" name="tag" id="tag">';
-								var labelProperty='<label> Property: </label>';
-								var listProperty='<input type="text" name="property" id="property">';
-								// var variable='<select>'+
-								// 	'<option value="http://www.example.org/id">Id</option>'+
-								// 	'<option value="http://www.w3.org/2000/01/rdf-schema#label">Name</option>'+
-								// 	'<option value="http://www.wikidata.org/prop/direct/P1083">Capacity</option>'+
-								// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#lat">Latitude</option>'+
-								// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#long"> Longtitude</option>'+
-								// 	'</select>';
-								var labelType='<label> Type: </label>';
-								var listType='<select>'+
-									'<option value="literal">LITERAL</option><option value="uri">URI</option>'+
-									'</select>';
-								var buttonDelete='<input type="button" value="Delete" onclick="deleteMapping(this)">'
-  								var array=[labelTag,editTextTag,labelProperty,listProperty,labelType,listType,buttonDelete];
+								function addConfigFile()
+								{
+									// console.log("configggg")
+									var file = document.getElementById("configFile").files[0];
+									if (file) {
+									    var reader = new FileReader();
+									    reader.readAsText(file, "UTF-8");
+									    reader.onload = function (evt) {
+									        console.log(evt.target.result);
+        									var jsonObject=JSON.parse(evt.target.result);
+        									var cityName=jsonObject.cityName.value;
+											var dynamicDataLink=jsonObject.dynamicDataLink.value;
+											var fileType=jsonObject.fileType.value;
+											var pathId=jsonObject.pathId.value;
+											var pathStation=jsonObject.pathStation.value;
+											var name=jsonObject.name.value;
+											var capacity=jsonObject.capacity.value;
+											var lat=jsonObject.lat.value;
+											var long=jsonObject.long.value;
+											var availableBicycles=jsonObject.availableBicycles.value;
+											var availableDocks=jsonObject.availableDocks.value;
 
-  								var table=document.getElementById("tableMapping");
-  								var row=table.insertRow(-1);
-  								
-  								for(var i=0;i<array.length;i++)
-  								{
-  									var cell=row.insertCell(i);
-  									cell.innerHTML=array[i];
-  								}
-							}
-							function deleteMapping(element)
-							{
-								var index=element.parentNode.parentNode.rowIndex;
-								document.getElementById("tableMapping").deleteRow(index);
-							}
+									    }
+									    reader.onerror = function (evt) {
+									        console.log("error reading file");
+									    }
+									}
+								}
+								function addMapping() 
+								{
+									var labelTag='<label>Tag: </label>';
+									var editTextTag='<input type="text" name="tag" id="tag">';
+									var labelProperty='<label> Property: </label>';
+									var listProperty='<input type="text" name="property" id="property">';
+									// var variable='<select>'+
+									// 	'<option value="http://www.example.org/id">Id</option>'+
+									// 	'<option value="http://www.w3.org/2000/01/rdf-schema#label">Name</option>'+
+									// 	'<option value="http://www.wikidata.org/prop/direct/P1083">Capacity</option>'+
+									// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#lat">Latitude</option>'+
+									// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#long"> Longtitude</option>'+
+									// 	'</select>';
+									var labelType='<label> Type: </label>';
+									var listType='<select>'+
+										'<option value="literal">LITERAL</option><option value="uri">URI</option>'+
+										'</select>';
+									var buttonDelete='<input type="button" value="Delete" onclick="deleteMapping(this)">'
+	  								var array=[labelTag,editTextTag,labelProperty,listProperty,labelType,listType,buttonDelete];
+
+	  								var table=document.getElementById("tableMapping");
+	  								var row=table.insertRow(-1);
+	  								
+	  								for(var i=0;i<array.length;i++)
+	  								{
+	  									var cell=row.insertCell(i);
+	  									cell.innerHTML=array[i];
+	  								}
+								}
+								function deleteMapping(element)
+								{
+									var index=element.parentNode.parentNode.rowIndex;
+									document.getElementById("tableMapping").deleteRow(index);
+								}
 
 							// addMapping();
 						</script>

@@ -2,6 +2,7 @@
 <!-- Website template by freewebsitetemplates.com -->
 <html>
 <head>
+
 	<style type="text/css">
       html, body, #basicMap {
           height: 600px;  /* The height is 400 pixels */
@@ -15,9 +16,21 @@
    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
    crossorigin=""></script>
     <script >
-    	var mymap;
-
-    	function init() {
+    class Station {
+        constructor(name,capacity,av_bikes,av_docks,lat,long,time){
+            this.name = name
+            this.capacity = capacity
+            this.av_bikes = av_bikes
+            this.av_docks = av_docks
+            this.lat = lat
+            this.long = long
+            this.time = time
+        }
+    }
+    var mymap;
+    var showMap = true
+    var stations = []
+    function init() {
     	
     	mymap = L.map('basicMap');
  	 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -29,7 +42,8 @@
 		}).addTo(mymap);
 		loadMarkers();
     }
-    function loadMarkers() {
+
+    function LoadStations() {
 
     	var xhttp = new XMLHttpRequest();
     	xhttp.onreadystatechange = function() {
@@ -38,9 +52,6 @@
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
-    			var center_lat = 0;
-    			var center_lon = 0;
-    			var counter = 0;
     			for (var i = 0; i < bindings.length; i++) {
     				var obj = bindings[i];
     				var lat_obj = obj['lat'];
@@ -58,17 +69,10 @@
     				var seconds = parseInt(new Date().getTime() / 1000);
     				var update_time = seconds - unix_timestamp;
 
- 	 				L.marker([lat_value, lon_value ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> <b>Station name</b>: '+name+'<br/><b>capacity</b>:'+capacity+'<br/><b>av_bikes</b>: '+av_bikes+'<br/> <b>av_docks</b>: '+av_docks+'<br/><b>last updated</b>: '+update_time+'s ago');
- 	 				center_lat += parseFloat(lat_value);
- 	 				center_lon += parseFloat(lon_value);
- 	 				counter++;
-    			}
-                
-    			console.log("added json-ld..")
-                center_lat = center_lat /counter;
-    			center_lon = center_lon / counter;
+                    stations.push(new Station(name,capacity,av_bikes,av_docks,lat_value,lon_value,update_time))
 
-    			mymap.setView([center_lat, center_lon], 13);
+    			}
+                init();
     		}
     	};
     	var dynamicSelect = document.getElementById("dynamic_select");
@@ -82,6 +86,27 @@
 
     	xhttp.send(query);
 
+    }
+
+    function printStations(){
+        stations.forEach(station => {
+            console.log(station)
+        })
+    }
+    function loadMarkers(){
+        var counter = 0;
+        var center_lat = 0;
+        var center_lon = 0;
+        stations.forEach(station => {
+            L.marker([station.lat, station.long ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> <b>Station name</b>: '+station.name+'<br/><b>capacity</b>:'+station.capacity+'<br/><b>av_bikes</b>: '+station.av_bikes+'<br/> <b>av_docks</b>: '+station.av_docks+'<br/><b>last updated</b>: '+station.time+'s ago');
+            center_lat += parseFloat(station.lat);
+            center_lon += parseFloat(station.long);
+            counter++;
+        })
+        center_lat = center_lat /counter;
+        center_lon = center_lon / counter;
+
+        mymap.setView([center_lat, center_lon], 13);
     }
     function loadCities(){
     
@@ -104,8 +129,7 @@
     				dynamicSelect.innerHTML += "<option value=\""+uri+"\" >"+name+"</option>";
 
     			}
-    			init();
-
+                LoadStations();
     		}
     	};
     	xhttp.open("POST", "http://localhost:3030/test/query", true);
@@ -113,12 +137,83 @@
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 
     }
+
+    function switchListener(){
+        var button_show = document.getElementById("btn_show");
+        if(showMap == true){
+            button_show.innerHTML = "SHOW MAP"
+            showMap = false
+            showList()
+        }else{
+            button_show.innerHTML = "SHOW LIST"
+            showMap = true
+            generateMap()
+        }
+    }
+    function generateMap(){
+
+        var list = document.getElementById("div_list_stations");
+        list.parentNode.removeChild(list);
+
+        var wrapper = document.getElementById("wrapper");
+        var div_map = document.createElement("div");
+        div_map.id = "basicMap";
+        wrapper.appendChild(div_map);
+        wrapper.appendChild(document.createElement("br"))
+        init()
+
+
+    }
+    function showList(){
+
+
+        var map = document.getElementById("basicMap");
+        map.parentNode.removeChild(map);
+
+        var wrapper = document.getElementById("wrapper");
+
+        var div_list = document.createElement("div");
+        div_list.id = "div_list_stations"
+        div_list.className = "list-cards";
+
+        stations.forEach(station => {
+            var div_rounded_shadowed = document.createElement("div");
+            div_rounded_shadowed.className = "card rounded shadowed";
+
+            var div_content = document.createElement("div");
+            div_content.className = "card-content";
+
+            var div_title = document.createElement("div");
+            div_title.className = "card-title";
+            div_title.innerHTML = "<h3>"+station.name+"</h3>";
+
+            var div_description = document.createElement("div");
+            div_description.className = "card-description";
+
+            div_description.innerHTML += "<b>capacity:</b>"+station.capacity+"</br>"
+            div_description.innerHTML += "<b>av_bikes:</b>"+station.av_bikes+"</br>"
+            div_description.innerHTML += "<b>av_docks:</b>"+station.av_docks+"</br>"
+            // div_description.innerHTML += "<b>latitude:</b>"+station.lat+"</br>"
+            // div_description.innerHTML += "<b>longtitude:</b>"+station.long+"</br>"
+
+
+            div_content.appendChild(div_title);
+            div_content.appendChild(div_description);
+            div_rounded_shadowed.appendChild(div_content);
+            div_list.appendChild(div_rounded_shadowed);
+        })
+
+        wrapper.appendChild(div_list);
+        
+
+        
+    }
     </script>
 	<meta charset="UTF-8">
 	<title>Map</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<link rel="stylesheet" href="css/combo.css" type="text/css">
-	
+    <link rel="stylesheet" href="css/style_cards.css" type="text/css">
 </head>
 <body onload="loadCities()">
 	<div id="header">
@@ -154,19 +249,25 @@
         </div>
     </div>
 	<div id="footer">
-		<div class="wrapper clearfix">		
+		<div id="wrapper" class="wrapper clearfix">		
 			<h3>Choose city:</h3>
-			<select id="dynamic_select" onchange="loadMarkers()">
+			<select id="dynamic_select" onchange="LoadStations()" style="width:150px;height:30px;">
 
 			</select>
 			</br>
 			<p style="font-size:160%;">Click on the markers viewed on the map to check bicycle stations information</p>
 			</br>
-			
+			<div id="sidebar">
+                <a id="btn_show" href="#" class="outlinedbtn" onclick="switchListener()">SHOW LIST</a>
+                <br/>
+                <br/>
+            </div>
+            <h2> Stations</h2>
             <div id="basicMap">
             
             </div>
             <br/>
+
 		</div>
         <div class="body">
             <div class="wrapper clearfix">

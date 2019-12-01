@@ -167,6 +167,28 @@
     function showList(){
 
 
+        var test = JSON.stringify(stations)
+        console.log(test)
+
+
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "test.php");
+
+        //Move the submit function to another variable
+        //so that it doesn't get overwritten.
+        form._submit_function_ = form.submit;
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "test");
+        hiddenField.setAttribute("value", test);
+
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form._submit_function_();
+
+
+
         var map = document.getElementById("basicMap");
         map.parentNode.removeChild(map);
 

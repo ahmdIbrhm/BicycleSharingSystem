@@ -6,7 +6,6 @@ function convert_multi_array($array)
 }
 if (isset($_FILES['file']))
 {
-	echo "File founded";
 	$staticOptions=$_POST['staticOptions'];
 	$array= json_decode($staticOptions,true);
 
@@ -43,14 +42,9 @@ if (isset($_FILES['file']))
 	sleep (1);
 	$javaCommandDynamic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFileDynamic . '" -k "' . $keyDynamic . '" -i "' . $iteratorDynamic . '" -a "' . $stringMappingsDynamic . '" -f "' . $fileNameDynamic . '" -u "' . $linkFileDynamic . '" ';
 	echo exec($javaCommandDynamic,$outputDynamic);
-	
-	
-
-
 }
 else
 {
-	echo "No file";
 	$allOptions=$_POST['allOptions'];
 	$array= json_decode($allOptions,true);
 
@@ -69,8 +63,9 @@ else
 	// echo $linkFileDynamic;
 
 	$javaCommandDynamic= 'java -jar eu.wdaqua.semanticscholar-1.0-SNAPSHOT.jar -c "' . $cityName . '" -t "' . $typeOfFileDynamic . '" -k "' . $keyDynamic . '" -i "' . $iteratorDynamic . '" -a "' . $stringMappingsDynamic . '" -f "' . $fileNameDynamic . '" -u "' . $linkFileDynamic . '" ';
+	// echo $javaCommandDynamic;
 	echo exec($javaCommandDynamic,$outputDynamic);
-	echo "Success";
+	// echo "Success";
 
 }
 

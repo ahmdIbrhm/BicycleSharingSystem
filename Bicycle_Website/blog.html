@@ -89,10 +89,10 @@
 								<td>Name:</td>
 								<td><input type="text" id="editTextNameTag"/></td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td>Capacity:</td>
 								<td><input type="text" id="editTextCapacityTag"/></td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td>Latitude:</td>
 								<td><input type="text" id="editTextLatTag"/></td>
@@ -131,13 +131,12 @@
 									        // console.log(evt.target.result);
         									var jsonObject=JSON.parse(evt.target.result);
         									var cityName=jsonObject.cityName;
-        									console.log(cityName);	
 											var dynamicDataLink=jsonObject.dynamicDataLink;
 											var fileType=jsonObject.fileType;
 											var pathId=jsonObject.pathId;
 											var pathStation=jsonObject.pathStation;
 											var name=jsonObject.name;
-											var capacity=jsonObject.capacity;
+											// var capacity=jsonObject.capacity;
 											var lat=jsonObject.lat;
 											var long=jsonObject.long;
 											var availableBicycles=jsonObject.availableBicycles;
@@ -152,7 +151,7 @@
 
 
 			  								document.getElementById('editTextNameTag').value = name;
-			  								document.getElementById('editTextCapacityTag').value = capacity;
+			  								// document.getElementById('editTextCapacityTag').value = capacity;
 			  								document.getElementById('editTextLatTag').value = lat;
 			  								document.getElementById('editTextLongTag').value = long;
 			  								document.getElementById('editTextAvailableBicyclesTag').value = availableBicycles;
@@ -168,20 +167,19 @@
 									var labelTag='<label>Tag: </label>';
 									var editTextTag='<input type="text" name="tag" id="tag">';
 									var labelProperty='<label> Property: </label>';
-									var listProperty='<input type="text" name="property" id="property">';
-									// var variable='<select>'+
-									// 	'<option value="http://www.example.org/id">Id</option>'+
-									// 	'<option value="http://www.w3.org/2000/01/rdf-schema#label">Name</option>'+
-									// 	'<option value="http://www.wikidata.org/prop/direct/P1083">Capacity</option>'+
-									// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#lat">Latitude</option>'+
-									// 	'<option value="http://www.w3.org/2003/01/geo/wgs84_pos#long"> Longtitude</option>'+
-									// 	'</select>';
-									var labelType='<label> Type: </label>';
-									var listType='<select>'+
-										'<option value="literal">LITERAL</option><option value="uri">URI</option>'+
+									// var listProperty='<input type="text" name="property" id="property">';
+									var listProperty='<select>'+
+										'<option value="http://www.wikidata.org/prop/direct/P1083">Capacity</option>'+
+										'<option value="http://www.wikidata.org/prop/direct/P6375">Address</option>'+
+										'<option value="http://www.wikidata.org/prop/direct/P5017">Last Update</option>'+
+										'<option value="https://schema.org/PaymentCard">Bank Card</option>'+
 										'</select>';
+									// var labelType='<label> Type: </label>';
+									// var listType='<select>'+
+									// 	'<option value="literal">LITERAL</option><option value="uri">URI</option>'+
+									// 	'</select>';
 									var buttonDelete='<input type="button" value="Delete" onclick="deleteMapping(this)">'
-	  								var array=[labelTag,editTextTag,labelProperty,listProperty,labelType,listType,buttonDelete];
+	  								var array=[labelTag,editTextTag,labelProperty,listProperty,buttonDelete];
 
 	  								var table=document.getElementById("tableMapping");
 	  								var row=table.insertRow(-1);
@@ -336,14 +334,12 @@
 								  onOpen: () => {
 								    Swal.showLoading()
 								    sendHttp()
-								    console.log("onOpen");
 								    // timerInterval = setInterval(() => {
 								    //   Swal.getContent().querySelector('b')
 								    //     .textContent = Swal.getTimerLeft()
 								    // }, 100)
 								  },
 								  onClose: () => {
-								  	console.log("onClose");
 								  }
 								}).then((result)=> {
 									//console.log("result")
@@ -367,9 +363,9 @@
 								var tableMappingsStatic=document.getElementById('tableMappingsStatic');
 								// var tagId=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
 								var tagName=tableMappingsStatic.rows[0].cells[1].childNodes[0].value;
-								var tagCapacity=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
-								var tagLatitude=tableMappingsStatic.rows[2].cells[1].childNodes[0].value;
-								var tagLongtitude=tableMappingsStatic.rows[3].cells[1].childNodes[0].value;
+								// var tagCapacity=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
+								var tagLatitude=tableMappingsStatic.rows[1].cells[1].childNodes[0].value;
+								var tagLongtitude=tableMappingsStatic.rows[2].cells[1].childNodes[0].value;
 
 								var cityName = document.getElementById('editTextCityName').value;
 								var dynamicLinkAll=document.getElementById('editTextDynamicDataLink').value;
@@ -381,31 +377,37 @@
 	
 								//define the properties used byour system							
 								var propertyName="http://www.w3.org/2000/01/rdf-schema#label";
-								var propertyCapacity="http://www.wikidata.org/prop/direct/P1083";
+								// var propertyCapacity="http://www.wikidata.org/prop/direct/P1083";
 								var propertyLatitude="http://www.w3.org/2003/01/geo/wgs84_pos#lat";
 								var propertyLongtitude="http://www.w3.org/2003/01/geo/wgs84_pos#long";
-								var propertyAvailableBicycles="http://www.example.org/availableBicycles";
-								var propertyAvailableDocks="http://www.example.org/availableDocks";
+								var propertyAvailableBicycles="http://smart-ics.ee.surrey.ac.uk/ontology/m3-lite.owl#CountAvailableBicycles";
+								var propertyAvailableDocks="http://purl.org/iot/vocab/m3-lite#CountEmptyDockingPoints";
 
-								var arrayTagsStatic=[tagName,tagCapacity,tagLatitude,tagLongtitude];
-								var arrayProperties=[propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
+								// var arrayTagsStatic=[tagName,tagCapacity,tagLatitude,tagLongtitude];
+								// var arrayProperties=[propertyName,propertyCapacity,propertyLatitude,propertyLongtitude];
+
+								var arrayTagsStatic=[tagName,tagLatitude,tagLongtitude];
+								var arrayProperties=[propertyName,propertyLatitude,propertyLongtitude];
+
+
 
 								var arrayMappings=[];
-
-								// start from i=1 because propertyId should have objectURI!!! See above 
+								var typesStaticMappings=["literal","decimal","decimal"];
 								for(var i=0;i<arrayTagsStatic.length;i++)
 								{
-									var mapping={"tag":"\\\."+arrayTagsStatic[i],"property":arrayProperties[i],"type":"literal"};
+									var mapping={"tag":"\\\."+arrayTagsStatic[i]+"\\z","property":arrayProperties[i],"type":typesStaticMappings[i]};
 									arrayMappings.push(mapping);
 								}
 
+								var typesofAddedMappings=["integer","literal","literal","boolean"];
 							    for ( var i = 0; row = tableMapping.rows[i]; i++ ) 
 							    {
 							      	row = tableMapping.rows[i];
 							      	var tag=row.cells[1].childNodes[0].value;
 							      	var property=row.cells[3].childNodes[0].value;
-							      	var type=row.cells[5].childNodes[0].value;
-							      	var mapping={"tag":"\\\."+tag,"property":property,"type":type};
+							      	var type=typesofAddedMappings[row.cells[3].childNodes[0].selectedIndex];
+							      	console.log(type);
+							      	var mapping={"tag":"\\\."+tag+"\\z","property":property,"type":type};
 							      	arrayMappings.push(mapping);
 							 	}
 
@@ -413,8 +415,9 @@
 
 							 	var availableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
   								var availableDocks=document.getElementById('editTextAvailableDocksTag').value;
-  								var mappingAvailableBicycles={"tag":"\\\."+availableBicycles,"property":propertyAvailableBicycles,"type":"literal"};
-  								var mappingAvailableDocks={"tag":"\\\."+availableDocks,"property":propertyAvailableDocks,"type":"literal"};
+  								var mappingAvailableBicycles={"tag":"\\\."+availableBicycles+"\\z","property":propertyAvailableBicycles,"type":"literal"};
+  								// Type is literal for java tool purpose!!
+  								var mappingAvailableDocks={"tag":"\\\."+availableDocks+"\\z","property":propertyAvailableDocks,"type":"literal"};
   								var arrayMappingsDynamic=[];
 
   								var request = new XMLHttpRequest();
@@ -470,14 +473,11 @@
 
 							        	// add conditions on this.responseText if
 							        	// loading was successful or not (depends on the return of the function) 
-							        	console.log("In 200 ok")
 							        	Swal.close()
 							        	Swal.fire(
 											  'Finished !',
-											  'Loading finished successfuly!',
-											  'success'
+											  this.responseText
 										)
-							        	// alert(this.	responseText);
 							    	}
 						    	};
 							}

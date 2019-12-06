@@ -49,6 +49,17 @@
         }
     }
 
+    function parseDate(time){
+        var a = new Date(time * 1000);
+        var year = a.getFullYear();
+        var month = a.getMonth()+1;
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var formattedTime = date + '-' + month + '-' + year + '-T' + hour + ':' + min + ':' + sec ;
+        return formattedTime;
+    }
     function LoadStations() {
 
         stations = []
@@ -74,30 +85,38 @@
                     var av_docks = obj['av_docks'].value;
                     var unix_timestamp = obj['max_date'].value;
 
-                    var seconds = parseInt(new Date().getTime() / 1000);
-                    var update_time = seconds - unix_timestamp;
-
+                    var a = new Date(unix_timestamp * 1000);
+                    var year = a.getFullYear();
+                    var month = a.getMonth()+1;
+                    var date = a.getDate();
+                    var hour = a.getHours();
+                    var min = a.getMinutes();
+                    var sec = a.getSeconds();
+                    var formattedTime = date + '-' + month + '-' + year + '-T' + hour + ':' + min + ':' + sec ;
                     var station_uri = obj['station'].value;
-                    
+                                
                     var station;
-                    var station = new Station(name,av_bikes,av_docks,lat_value,lon_value,update_time,station_uri)
-                    if(obj['capacity'] != null){
+                    var station = new Station(name,av_bikes,av_docks,lat_value,lon_value,formattedTime,station_uri);
+
+                    if(obj.hasOwnProperty('capacity')){
                          var capacity = obj['capacity'].value;
                          station.capacity = capacity;
                     }
-                    if(obj['address'] != null){
+                    if(obj.hasOwnProperty('address')){
                         var address = obj['address'].value;
                         station.address = address
                     }
-                    if(obj['bank_card'] != null){
+                   
+                    if(obj.hasOwnProperty('bank_card')){
+
                         var bank_card = obj['bank_card'].value;
                         station.bank_card = bank_card
                     }
-    				if(obj['last_update'] != null ){
+    				if(obj.hasOwnProperty('last_time')){
 
-                        station.time = obj['last_update'].value;
+                        station.time = obj['last_time'].value;
+
                     }
-    				
     				
                     
                     stations.push(station)
@@ -139,8 +158,9 @@
                 "group by ?station\n" +
                 "      }\n" +
                 "   }";*/
+
     	var query ="query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> \n" +
-                "SELECT ?station ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks ?address ?last_update WHERE {\n" +
+                "SELECT ?station ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks ?address ?last_time WHERE {\n" +
                 " ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; \n" +
                 "       <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;\n" +
                 "       <http://www.w3.org/2000/01/rdf-schema#label> ?name ; \n" +
@@ -150,11 +170,12 @@
                 "       OPTIONAL { ?station <https://schema.org/PaymentCard> ?bank_card .} \n" +
                 
                 "  { \n" +
-                "  SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks)  WHERE { \n" +
+                "  SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks) (MAX(?last_update) as ?last_time)  WHERE { \n" +
                 "       ?station <http://www.schema.org/State> ?state .\n" +
                 "       ?state <http://purl.org/iot/vocab/m3-lite#Timestamp> ?date ; \n" +
                 "          <http://smart-ics.ee.surrey.ac.uk/ontology/m3-lite.owl#CountAvailableBicycles> ?availableBicycles ; \n" +
                 "          <http://purl.org/iot/vocab/m3-lite#CountEmptyDockingPoints> ?availableDocks; \n" +
+                "          optional { ?state wdt:P5017 ?last_update .} \n" +
                 "     } group by ?station \n" +
                 "  } \n" +
                 "}";
@@ -174,7 +195,7 @@
 
         stations.forEach(station => {
 
-            var box_text = '<b>Bicycle station</b> <br/> <b>Station name</b>: '+station.name+'<br/><b>av_bikes</b>: '+station.av_bikes+'<br/> <b>av_docks</b>: '+station.av_docks+'<br/><b>last updated</b>: '+station.time+'s ago'
+            var box_text = '<b>Bicycle station</b> <br/> <b>Station name</b>: '+station.name+'<br/><b>av_bikes</b>: '+station.av_bikes+'<br/> <b>av_docks</b>: '+station.av_docks+'<br/><b>last updated</b>: '+station.time
             if(station.capacity != null){
                 box_text += '<br/><b>capacity</b>:'+station.capacity
             }
@@ -415,14 +436,33 @@
                     echo '<div class="list-cards">';
 
                     foreach ($stations_array as $key => $value) {
-                    echo '  <div class="card rounded shadowed">
+                        echo '  <div class="card rounded shadowed">
                             <div class="card-content">
                             <div class="card-title">
                                 <h3 about="'.$value['station_uri'].'" property="http://www.w3.org/2000/01/rdf-schema#label" >'.$value['name'].'</h3>
                             <div class="card-description">
                                 <p about="'.$value['station_uri'].'" property="http://www.example.org/availableBicycles" content="'.$value['av_bikes'].'"><b>Available Bicycles: </b>'.$value['av_bikes'].'</p>
                                 <p about="'.$value['station_uri'].'" property="http://www.example.org/availableDocks" content="'.$value['av_docks'].'" ><b>Available Docks: </b>'.$value['av_docks'].'</p>
-                            </div>    
+                                ';
+                        if(isset($value['capacity'])){
+                            echo '<p about="'.$value['station_uri'].'" property="http://www.wikidata.org/prop/direct/P1083" content="'.$value['capacity'].'" ><b>Capacity: </b>'.$value['capacity'].'</p>
+                            ';
+                        }
+                        if(isset($value['address'])){
+                            echo '<p about="'.$value['station_uri'].'" property="http://www.wikidata.org/prop/direct/P6375" content="'.$value['address'].'" ><b>Address: </b>'.$value['address'].'</p>
+                            ';
+                        }
+                        if(isset($value['bank_card'])){
+                            echo '<p about="'.$value['station_uri'].'" property="https://schema.org/PaymentCard" content="'.$value['bank_card'].'" ><b>Pay by card: </b>'.$value['bank_card'].'</p>
+                            ';
+                        }
+                        if(isset($value['time'])){
+                            echo '<p about="'.$value['station_uri'].'" property="<http://purl.org/iot/vocab/m3-lite#Timestamp>" content="'.$value['time'].'" ><b>Last reported: </b>'.$value['time'].'</p>
+                            ';
+                        }
+
+
+                        echo'</div>    
                             </div>
                             </div></div>';                
                     }

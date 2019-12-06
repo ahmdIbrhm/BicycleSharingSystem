@@ -32,7 +32,7 @@ if (isset($_FILES['file']))
 
 	// echo $stringMappingsDynamic;
 
-	$fileNameDynamic="dynamic.json";
+	$fileNameDynamic="dynamic";
 	file_put_contents($fileNameDynamic, file_get_contents($linkFileDynamic));
 
 
@@ -57,7 +57,7 @@ else
 	$linkFileDynamic=$array["linkFile"];
 	// echo $stringMappingsDynamic;
 
-	$fileNameDynamic="dynamic.json";
+	$fileNameDynamic="dynamic";
 	file_put_contents($fileNameDynamic, file_get_contents($linkFileDynamic));
 
 	// echo $linkFileDynamic;

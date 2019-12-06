@@ -9,6 +9,7 @@ curl -X POST \
 # runtime=$((end-start))
 # echo "Loading time: $runtime"
 rm -f $1
+rm -f "dynamic"
 echo "Finished script!"
 
 

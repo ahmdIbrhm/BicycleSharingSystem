@@ -17,9 +17,9 @@
    crossorigin=""></script>
     <script >
     class Station {
-        constructor(name,capacity,av_bikes,av_docks,lat,long,time,station_uri){
+
+        constructor(name,av_bikes,av_docks,lat,long,time,station_uri){
             this.name = name
-            this.capacity = capacity
             this.av_bikes = av_bikes
             this.av_docks = av_docks
             this.lat = lat
@@ -30,21 +30,28 @@
     }
     var mymap;
     var stations = []
+    mapAlreadyInit = false;
     function init() {
-    	
-    	mymap = L.map('basicMap');
- 	 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox.streets'
-		}).addTo(mymap);
-		loadMarkers();
+
+    	if(document.getElementById('basicMap')){
+        	if(!mapAlreadyInit){
+                mymap = L.map('basicMap');
+         	 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        		maxZoom: 18,
+        		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        		id: 'mapbox.streets'
+        		}).addTo(mymap);
+                mapAlreadyInit = true;
+            }
+    		loadMarkers();
+        }
     }
 
     function LoadStations() {
 
+        stations = []
     	var xhttp = new XMLHttpRequest();
     	xhttp.onreadystatechange = function() {
     		if (this.readyState == 4 && this.status == 200) {
@@ -52,26 +59,48 @@
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
+                var count = 0
     			for (var i = 0; i < bindings.length; i++) {
+
     				var obj = bindings[i];
     				var lat_obj = obj['lat'];
     				var lon_obj = obj['lon'];
 
     				var lat_value = lat_obj.value;
     				var lon_value = lon_obj.value;
-    				var capacity = obj['capacity'].value;
-    				var name = obj['name'].value;
-    				
-    				var av_bikes = obj['av_bikes'].value;
-    				var av_docks = obj['av_docks'].value;
-    				var unix_timestamp = obj['max_date'].value;
 
-    				var seconds = parseInt(new Date().getTime() / 1000);
-    				var update_time = seconds - unix_timestamp;
+                    var name = obj['name'].value;
+                    var av_bikes = obj['av_bikes'].value;
+                    var av_docks = obj['av_docks'].value;
+                    var unix_timestamp = obj['max_date'].value;
+
+                    var seconds = parseInt(new Date().getTime() / 1000);
+                    var update_time = seconds - unix_timestamp;
 
                     var station_uri = obj['station'].value;
+                    
+                    var station;
+                    var station = new Station(name,av_bikes,av_docks,lat_value,lon_value,update_time,station_uri)
+                    if(obj['capacity'] != null){
+                         var capacity = obj['capacity'].value;
+                         station.capacity = capacity;
+                    }
+                    if(obj['address'] != null){
+                        var address = obj['address'].value;
+                        station.address = address
+                    }
+                    if(obj['bank_card'] != null){
+                        var bank_card = obj['bank_card'].value;
+                        station.bank_card = bank_card
+                    }
+    				if(obj['last_update'] != null ){
 
-                    stations.push(new Station(name,capacity,av_bikes,av_docks,lat_value,lon_value,update_time,station_uri))
+                        station.time = obj['last_update'].value;
+                    }
+    				
+    				
+                    
+                    stations.push(station)
 
     			}
                 init();
@@ -79,17 +108,56 @@
     	};
     	var dynamicSelect = document.getElementById("dynamic_select");
 
+
     	var selected_city = dynamicSelect[dynamicSelect.selectedIndex].value;
         
 
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
         // change query ......
 
 
-    	var query = "query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> SELECT ?station ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks WHERE { ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ; <http://www.w3.org/2000/01/rdf-schema#label> ?name ; wdt:P1083 ?capacity ; wdt:P276 <"+selected_city+">{ SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks) WHERE { ?station <http://www.schema.org/State> ?state . ?state <http://www.example.org/time> ?date ; <http://www.example.org/availableBicycles> ?availableBicycles ; <http://www.example.org/availableDocks> ?availableDocks; } group by ?station } }";
-
+        /*var query = "query=PREFIX  wdt:  <http://www.wikidata.org/prop/direct/>\n" +
+                "\n" +
+                "SELECT  ?lat ?lon ?capacity ?name ?max_date ?availableBicycles ?availableDocks ?station\n" +
+                " WHERE\n" +
+                "   { ?station  <http://www.w3.org/2003/01/geo/wgs84_pos#long>  ?lon ;\n" +
+                "               <http://www.w3.org/2003/01/geo/wgs84_pos#lat>  ?lat ;\n" +
+                "               <http://www.w3.org/2000/01/rdf-schema#label>  ?name ;\n" +
+                "               wdt:P1083             ?capacity ;\n" +
+                "               wdt:P276              <"+ selected_city+"> ."+
+                "               ?state <http://www.example.org/availableBicycles>  ?availableBicycles ;\n" +
+                "                      <http://www.example.org/availableDocks>  ?availableDocks.\n" +
+                "            {\n" +
+                "    SELECT ?station (MAX(?date) AS ?max_date)  (SAMPLE(?state_1) as ?state)\n" +
+                "WHERE { \n" +
+                "  ?station <http://www.schema.org/State> ?state_1 .\n" +
+                "      \n" +
+                "?state_1  <http://www.example.org/time>  ?date .\n" +
+                "}\n" +
+                "group by ?station\n" +
+                "      }\n" +
+                "   }";*/
+    	var query ="query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> \n" +
+                "SELECT ?station ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks ?address ?last_update WHERE {\n" +
+                " ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; \n" +
+                "       <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;\n" +
+                "       <http://www.w3.org/2000/01/rdf-schema#label> ?name ; \n" +
+                "       wdt:P276 <"+selected_city+"> .\n" +
+                "       OPTIONAL { ?station wdt:P1083 ?capacity .} \n" +
+                "       OPTIONAL { ?station wdt:P6375 ?address .} \n" +
+                "       OPTIONAL { ?station <https://schema.org/PaymentCard> ?bank_card .} \n" +
+                
+                "  { \n" +
+                "  SELECT ?station (MAX(?date) AS ?max_date) (MAX(?availableBicycles) as ?av_bikes) (MAX(?availableDocks) as ?av_docks)  WHERE { \n" +
+                "       ?station <http://www.schema.org/State> ?state .\n" +
+                "       ?state <http://purl.org/iot/vocab/m3-lite#Timestamp> ?date ; \n" +
+                "          <http://smart-ics.ee.surrey.ac.uk/ontology/m3-lite.owl#CountAvailableBicycles> ?availableBicycles ; \n" +
+                "          <http://purl.org/iot/vocab/m3-lite#CountEmptyDockingPoints> ?availableDocks; \n" +
+                "     } group by ?station \n" +
+                "  } \n" +
+                "}";
     	xhttp.send(query);
 
     }
@@ -103,20 +171,37 @@
         var counter = 0;
         var center_lat = 0;
         var center_lon = 0;
+
         stations.forEach(station => {
-            L.marker([station.lat, station.long ]).addTo(mymap).bindPopup('<b>Bicycle station</b> <br/> <b>Station name</b>: '+station.name+'<br/><b>capacity</b>:'+station.capacity+'<br/><b>av_bikes</b>: '+station.av_bikes+'<br/> <b>av_docks</b>: '+station.av_docks+'<br/><b>last updated</b>: '+station.time+'s ago');
+
+            var box_text = '<b>Bicycle station</b> <br/> <b>Station name</b>: '+station.name+'<br/><b>av_bikes</b>: '+station.av_bikes+'<br/> <b>av_docks</b>: '+station.av_docks+'<br/><b>last updated</b>: '+station.time+'s ago'
+            if(station.capacity != null){
+                box_text += '<br/><b>capacity</b>:'+station.capacity
+            }
+            if(station.address != null){
+                box_text += '<br/><b>address</b>:'+station.address
+            }
+            if(station.bank_card != null){
+                box_text += '<br/><b>payment by card:</b>:'+station.bank_card
+            }
+
+            var marker = L.marker([station.lat, station.long ]).addTo(mymap).bindPopup(box_text);
+            
+
             center_lat += parseFloat(station.lat);
             center_lon += parseFloat(station.long);
             counter++;
         })
+
         center_lat = center_lat /counter;
         center_lon = center_lon / counter;
 
         mymap.setView([center_lat, center_lon], 13);
     }
     function loadCities(){
-    
+   
     var dynamicSelect = document.getElementById("dynamic_select");
+
    	var xhttp = new XMLHttpRequest();
 
     	xhttp.onreadystatechange = function() {
@@ -126,6 +211,7 @@
     			var results = obj.results;
     			var bindings = results.bindings;
     			var str = '';
+
     			for (var i = 0; i < bindings.length; i++) {
 
     				var obj = bindings[i];
@@ -138,14 +224,15 @@
                 LoadStations();
     		}
     	};
-    	xhttp.open("POST", "http://35.228.55.184:3030/test/query", true);
+
+    	xhttp.open("POST", "http://localhost:3030/test/query", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send("query=select ?city ?name where {?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }");
 
     }
 
     function switchListener(showMap){
-        console.log(showMap)
+        
         var button_show = document.getElementById("btn_show");
         if(showMap == false){
             button_show.innerHTML = "SHOW MAP"
@@ -271,7 +358,7 @@
                     <a href="blog.html">Add Cities</a>
                 </li>
                 <li class="selected">
-                    <a href="map.html">Map</a>
+                    <a href="map.php">Map</a>
                 </li>
                 <li>
                     <a href="about.html">Statistics</a>

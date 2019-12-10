@@ -117,7 +117,6 @@
                         station.time = obj['last_time'].value;
 
                     }
-    				
                     
                     stations.push(station)
 
@@ -160,7 +159,7 @@
                 "   }";*/
 
     	var query ="query=PREFIX wdt: <http://www.wikidata.org/prop/direct/> \n" +
-                "SELECT ?station ?lat ?lon ?capacity ?name ?max_date ?av_bikes ?av_docks ?address ?last_time WHERE {\n" +
+                "SELECT ?station ?lat ?lon ?capacity ?bank_card ?name ?max_date ?av_bikes ?av_docks ?address ?last_time WHERE {\n" +
                 " ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ; \n" +
                 "       <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;\n" +
                 "       <http://www.w3.org/2000/01/rdf-schema#label> ?name ; \n" +
@@ -457,7 +456,7 @@
                             ';
                         }
                         if(isset($value['time'])){
-                            echo '<p about="'.$value['station_uri'].'" property="<http://purl.org/iot/vocab/m3-lite#Timestamp>" content="'.$value['time'].'" ><b>Last reported: </b>'.$value['time'].'</p>
+                            echo '<p about="'.$value['station_uri'].'" property="http://purl.org/iot/vocab/m3-lite#Timestamp" content="'.$value['time'].'" ><b>Last reported: </b>'.$value['time'].'</p>
                             ';
                         }
 

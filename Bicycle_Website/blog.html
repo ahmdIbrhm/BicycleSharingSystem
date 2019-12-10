@@ -391,7 +391,10 @@
 								var typesStaticMappings=["literal","decimal","decimal"];
 								for(var i=0;i<arrayTagsStatic.length;i++)
 								{
-									var mapping={"tag":"\\\."+arrayTagsStatic[i]+"\\z","property":arrayProperties[i],"type":typesStaticMappings[i]};
+									if(typeOfFileAll=="csv")
+										var mapping={"tag":arrayTagsStatic[i]+"\\z","property":arrayProperties[i],"type":typesStaticMappings[i]};	
+									else
+										var mapping={"tag":"\\\."+arrayTagsStatic[i]+"\\z","property":arrayProperties[i],"type":typesStaticMappings[i]};
 									arrayMappings.push(mapping);
 								}
 
@@ -403,6 +406,9 @@
 							      	var property=row.cells[3].childNodes[0].value;
 							      	var type=typesofAddedMappings[row.cells[3].childNodes[0].selectedIndex];
 							      	console.log(type);
+							      	if(typeOfFileAll=="csv")
+										var mapping={"tag":tag+"\\z","property":property,"type":type};
+									else
 							      	var mapping={"tag":"\\\."+tag+"\\z","property":property,"type":type};
 							      	arrayMappings.push(mapping);
 							 	}
@@ -411,9 +417,21 @@
 
 							 	var availableBicycles=document.getElementById('editTextAvailableBicyclesTag').value;
   								var availableDocks=document.getElementById('editTextAvailableDocksTag').value;
-  								var mappingAvailableBicycles={"tag":"\\\."+availableBicycles+"\\z","property":propertyAvailableBicycles,"type":"literal"};
+  								if(typeOfFileAll=="csv")
+  								{
+  									console.log("CSV");
+  									var mappingAvailableBicycles={"tag":availableBicycles+"\\z","property":propertyAvailableBicycles,"type":"literal"};
+  								
+  									var mappingAvailableDocks={"tag":availableDocks+"\\z","property":propertyAvailableDocks,"type":"literal"};
+  								}
+  								else
+  								{	
+  									var mappingAvailableBicycles={"tag":"\\\."+availableBicycles+"\\z","property":propertyAvailableBicycles,"type":"literal"};
+  									var mappingAvailableDocks={"tag":"\\\."+availableDocks+"\\z","property":propertyAvailableDocks,"type":"literal"};
+  								}
   								// Type is literal for java tool purpose!!
-  								var mappingAvailableDocks={"tag":"\\\."+availableDocks+"\\z","property":propertyAvailableDocks,"type":"literal"};
+
+  								
   								var arrayMappingsDynamic=[];
 
   								var request = new XMLHttpRequest();

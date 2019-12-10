@@ -37,10 +37,10 @@ A clear demonstration is available in this picture below:
 
 ### Queries for data visualization
 
-* Query to get the available cities in the database:
+* Query to get the available cities in the database:  
 `select ?city ?name where{ ?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }`
 * Query to get the stations associated to the selected city with their current states and the information about the states:
-`PREFIX wdt: <http://www.wikidata.org/prop/direct/>  
+```PREFIX wdt: <http://www.wikidata.org/prop/direct/>  
 SELECT ?station ?lat ?lon ?capacity ?bank_card ?name ?max_date ?av_bikes ?av_docks ?address ?last_time  
       WHERE {  ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ;
                         <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;
@@ -57,7 +57,8 @@ SELECT ?station ?lat ?lon ?capacity ?bank_card ?name ?max_date ?av_bikes ?av_doc
                                } group by ?station
                           }  
              }
-`
+```
+* Query 
 
 
 ## Problems and limitations

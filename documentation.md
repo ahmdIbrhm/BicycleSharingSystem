@@ -23,7 +23,7 @@ For the remaining fields, each field should contain the key word that provides i
 * In XML files: The key word is either an attribute or a XML tag.
 * In CSV files: The key word is the column name.
 
-![GitHub Logo](/images/get_started.png)
+![GitHub Logo](Bicycle_Website/images/get_started.png)
 Format: ![Alt Text](url)
 
 When the user finishes filling the form, he presses the **"Send information"** button.

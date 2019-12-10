@@ -39,7 +39,10 @@ A clear demonstration is available in this picture below:
 
 * Query to get the available cities in the database:  
 `select ?city ?name where{ ?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }`
-* Query to get the stations associated to the selected city with their current states and the information about the states:
+
+The next three queries are to get the same content but we chosed the fastest one which is the first one:
+
+1. Query to get the stations associated to the selected city with their current states and the information about the states:
 ```PREFIX wdt: <http://www.wikidata.org/prop/direct/>  
 SELECT ?station ?lat ?lon ?capacity ?bank_card ?name ?max_date ?av_bikes ?av_docks ?address ?last_time  
       WHERE {  ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ;
@@ -58,9 +61,69 @@ SELECT ?station ?lat ?lon ?capacity ?bank_card ?name ?max_date ?av_bikes ?av_doc
                           }  
              }
 ```
-* Query 
-
-
+2. This query was proposed using the SAMPLE method but apparently the one above is faster.
+```PREFIX  wdt:  <http://www.wikidata.org/prop/direct/>  
+      SELECT  ?lat ?lon ?capacity ?name ?max_date ?availableBicycles ?availableDocks ?station  WHERE    { 
+      ?station  <http://www.w3.org/2003/01/geo/wgs84_pos#long>  ?lon ;
+                <http://www.w3.org/2003/01/geo/wgs84_pos#lat>  ?lat ;
+                 <http://www.w3.org/2000/01/rdf-schema#label>  ?name ;
+                 wdt:P1083             ?capacity ;
+                 wdt:P276              <http://www.example.org/Lyon> .
+                 ?state <http://www.example.org/availableBicycles>  ?availableBicycle;
+                 <http://www.example.org/availableDocks>  ?availableDocks.
+                 {     
+                 SELECT ?station (MAX(?date) AS ?max_date)  (SAMPLE(?state_1) as ?state) WHERE {
+                              ?station <http://www.schema.org/State> ?state_1 .
+                              ?state_1  <http://www.example.org/time>  ?date .
+                    } group by ?station
+                 }
+       }
+```
+3. Using FILTERs:
+```
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?lat ?lon ?capacity ?name ?max_date ?availableBicycles ?availableDocks
+  WHERE {
+  ?station <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon ;
+  <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat ;
+  <http://www.w3.org/2000/01/rdf-schema#label> ?name ;
+  <http://www.wikidata.org/prop/direct/P1083> ?capacity ;
+  wdt:P276 <http://www.example.org/Saint_Etienne> ;
+  {
+        select ?station  ?availableBicycles ?availableDocks ?max_date where {
+        ?station <http://www.schema.org/State> ?state .
+        ?state <http://www.example.org/availableBicycles> ?availableBicycles;
+        <http://www.example.org/availableDocks> ?availableDocks ;
+        <http://www.example.org/time> ?max_date 
+            {
+                  select ?strState (max(?date) as ?max_date) where 
+                  {
+                    SELECT (replace(str(?state),"[0-9]*$","") as ?strState) ?date
+                    WHERE
+                    {
+                    ?state <http://www.example.org/time> ?date .
+                    }
+                  }
+                  group by ?strState
+             }
+        }
+  }
+group by ?station  ?availableBicycles ?availableDocks ?max_date
+  }
+}
+```
+* Query to get the states of the stations starting from a specified date:
+```
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+      select ?av_bikes ?av_docks ?time where {
+      <http://www.example.org/Lyon/7008> <http://www.schema.org/State> ?state;
+                                          wdt:P276 <http://www.example.org/Lyon> .
+      ?state <http://purl.org/iot/vocab/m3-lite#Timestamp> ?time;
+             <http://smart-ics.ee.surrey.ac.uk/ontology/m3-lite.owl#CountAvailableBicycles>  ?av_bikes ;
+             <http://purl.org/iot/vocab/m3-lite#CountEmptyDockingPoints>  ?av_docks.
+             FILTER (?time >= "1575158400")
+    }
+```
 ## Problems and limitations
 In the current implementation there some limitations that are caused by the fact of the diversity and interoperability problems:
 

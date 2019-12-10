@@ -25,6 +25,12 @@ For the remaining fields, each field should contain the key word that provides i
 
 ![GitHub Logo](Bicycle_Website/images/get_started.png)
 
+The user can add additional information about a station, by pressing the button **Add mapping**. The additional information can be:
+* Capacity
+* Address
+* Last update
+* Bank card
+
 When the user finishes filling the form, he presses the **"Send information"** button.
 
 # Stations of the Added cities

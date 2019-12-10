@@ -27,7 +27,7 @@ When the user finishes filling the form, he presses the **"Send information"** b
 
 # Stations of the Added cities
 
-To visualize the station of the added cities, the user should go to the tab named **Map**. There, a map will open and the user can see all the added stations. When clicking on a marker, the map shows the corresponding information.
+To visualize the station of the added cities, the user should go to the tab named **Map**. There, a map will open and the user can choose a city and see all the added stations. When clicking on a marker, the map shows the corresponding information.
 Another form of visualizing the data, is the card view. The user can click the button **SHOW LIST**, in order to see the stations listed in a card view.
 
 # Statistics

@@ -133,8 +133,23 @@ In the current implementation there some limitations that are caused by the fact
 * Allowing the exceptions in the strucure of the data would make the GUI of the input more complicated and not user-friendly.
 
 ## Evaluation
+### What is done well?
+The things that are robustly implemented:
+* The ontology architecture and structure
+In our ontology, in order to store the states of each station, we created a new class "State". This class has 4 properties which describes the state of the station at a specific time.
+* The website
+The website implemented uses semantic web technologies to query data and view them on a map. Addition to that, the page called map.php is implemented using HTML with integrated RDF-a. 
+* The tool used to convert JSON, XML, or CSV into RDF
+The reason is that this tool is able to convert data about bicycle stations in any city, so it is not dedicated only to a specific city
 
+### What is poorly done? 
+The things that are poorly implemented:
+* The tool used to convert JSON, XML, or CSV into RDF
+The reason is that this tool is not extendable to be able to convert data about train stations and car stations
 
+### Who did what?
+
+### 
 ## Conclusion and future work
 
 The current system is a start where it aims to be more generic than normal cases using a user-friendly interface to help the parsing scenario allowing exceptions and extra information but the open-data is so diverse where it is a huge challenge for such systems.The system could be extended to other kind of availabilities and the interoperability problems would start appearing more often.We could imagine a tool that can parse any kind of structure but this is quite impossible for the moment but maybe later it would not be that hard.

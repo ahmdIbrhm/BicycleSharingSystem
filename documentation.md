@@ -1,5 +1,3 @@
-# add permission
-
 # Requirements to be Installed
 A server with the following requirements:
 * PHP

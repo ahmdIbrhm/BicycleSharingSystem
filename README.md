@@ -161,7 +161,7 @@ The reason is that this tool is not extendable to be able to convert data about 
 #### Ali
 * Implemented the contexts of querying data from the triple store. 
 * Data visualization (Map, Statistics)
-* RDF-a integrated in HTML
+* RDF-a integration in HTML
 
 
 

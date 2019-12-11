@@ -150,11 +150,17 @@ The reason is that this tool is not extendable to be able to convert data about 
 
 ### Who did what?
 
+#### As a team
+* Design of the ontology
+* Queries to get specific data
+* 
 #### Ahmad 
-
+* Implemented the processes of adding data to the triple store.
+* Created ontology file and description
 #### Ali
 
-#### As a team
+
+
 
 
 ## Conclusion and future work

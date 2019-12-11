@@ -135,16 +135,16 @@ In the current implementation there some limitations that are caused by the fact
 ## Evaluation
 ### What is done well?
 The things that are robustly implemented:
-* **The ontology architecture and structure**
+* **The ontology architecture and structure**  
 In our ontology, in order to store the states of each station, we created a new class "State". This class has 4 properties which describes the state of the station at a specific time.
-* **The website**
+* **The website**  
 The website implemented uses semantic web technologies to query data and view them on a map. Addition to that, the page called map.php is implemented using HTML with integrated RDF-a. 
-* **The tool used to convert JSON, XML, or CSV into RDF**
+* **The tool used to convert JSON, XML, or CSV into RDF**  
 The reason is that this tool is able to convert data about bicycle stations in any city, so it is not dedicated only to a specific city
 
 ### What is poorly done? 
 The things that are poorly implemented:
-* **The tool used to convert JSON, XML, or CSV into RDF**
+* **The tool used to convert JSON, XML, or CSV into RDF**  
 The reason is that this tool is not extendable to be able to convert data about train stations and car stations
 
 ### Who did what?

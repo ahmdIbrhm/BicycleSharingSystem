@@ -4,9 +4,6 @@
 
 In this project we provide a service based on semantic web technologies where we can add open data from any source about bicycle sharing stations in different cities, convert the data into a unique model, and provide visualization for this data. We conisder a fixed model for such services, we convert the provided data (which could be fairly diverse from source to source) to RDF format. The process can be run in the background to dump the real-time data into the database (triple store) so that we will have an up-to date data visualization (website) and also keep track about the station states to perform statistical visualization.
 
-<-- using a pre-designed tool that accepts parameters about how the file is structured -->
-<-- The process could fail due to the fact that we could a huge diversity where it have some limitations described more precisely in the scope. -->
-
 ## System architecture
 
 ### Description

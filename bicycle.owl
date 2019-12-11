@@ -15,6 +15,29 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/1999/02/22-rdf-syntax-ns#type -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+    
+
+
+    <!-- http://www.w3.org/2000/01/rdf-schema#label -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#label"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
     // Object Properties
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -23,22 +46,22 @@
     
 
 
+    <!-- http://schema.org/Property -->
+
+    <owl:ObjectProperty rdf:about="http://schema.org/Property">
+        <rdfs:domain rdf:resource="http://bicyclesharing.educationhost.cloud/City"/>
+        <rdfs:range rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:comment>The configuration of the file of a city</rdfs:comment>
+        <rdfs:label>Configuration</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.schema.org/State -->
 
     <owl:ObjectProperty rdf:about="http://www.schema.org/State">
         <rdfs:domain rdf:resource="http://bicyclesharing.educationhost.cloud/Station"/>
         <rdfs:range rdf:resource="http://bicyclesharing.educationhost.cloud/State"/>
-        <rdfs:comment>the status of the station</rdfs:comment>
-        <rdfs:label>has status</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.w3.org/1999/02/22-rdf-syntax-ns#type -->
-
-    <owl:ObjectProperty rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
-        <rdfs:domain rdf:resource="http://bicyclesharing.educationhost.cloud/Station"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"/>
     </owl:ObjectProperty>
     
 
@@ -48,8 +71,6 @@
     <owl:ObjectProperty rdf:about="http://www.wikidata.org/prop/direct/P276">
         <rdfs:domain rdf:resource="http://bicyclesharing.educationhost.cloud/Station"/>
         <rdfs:range rdf:resource="http://bicyclesharing.educationhost.cloud/City"/>
-        <rdfs:comment>Location, located in which city</rdfs:comment>
-        <rdfs:label>location</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -95,6 +116,50 @@
     
 
 
+    <!-- http://www.example.org/allMappings -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/allMappings">
+        <rdfs:domain rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>All the mappings that are needed to change from the type file to RDF</rdfs:comment>
+        <rdfs:label>Set of mappings</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/fileType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/fileType">
+        <rdfs:domain rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Type of file of the stations of the city</rdfs:comment>
+        <rdfs:label>Type of file</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/iteratorTag -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/iteratorTag">
+        <rdfs:domain rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The iterator field</rdfs:comment>
+        <rdfs:label>Iterator Tag</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/keyTag -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/keyTag">
+        <rdfs:domain rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The key field</rdfs:comment>
+        <rdfs:label>Key Tag</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.w3.org/2000/01/rdf-schema#label -->
 
     <owl:DatatypeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
@@ -127,6 +192,17 @@
     <owl:DatatypeProperty rdf:about="http://www.wikidata.org/prop/direct/P1083">
         <rdfs:domain rdf:resource="http://bicyclesharing.educationhost.cloud/Station"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.wikidata.org/prop/direct/P2699 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.wikidata.org/prop/direct/P2699">
+        <rdfs:domain rdf:resource="http://www.example.org/dynamicConfiguration"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The URL where we can find this resource</rdfs:comment>
+        <rdfs:label>Url</rdfs:label>
     </owl:DatatypeProperty>
     
 
@@ -172,7 +248,14 @@
 
     <!-- http://bicyclesharing.educationhost.cloud/City -->
 
-    <owl:Class rdf:about="http://bicyclesharing.educationhost.cloud/City"/>
+    <owl:Class rdf:about="http://bicyclesharing.educationhost.cloud/City">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+                <owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
     
 
 
@@ -214,7 +297,7 @@
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.schema.org/State"/>
-                <owl:allValuesFrom rdf:resource="http://bicyclesharing.educationhost.cloud/State"/>
+                <owl:someValuesFrom rdf:resource="http://bicyclesharing.educationhost.cloud/State"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -258,10 +341,28 @@
     
 
 
+    <!-- http://www.example.org/dynamicConfiguration -->
+
+    <owl:Class rdf:about="http://www.example.org/dynamicConfiguration">
+        <rdfs:label>Dynamic Configuration</rdfs:label>
+    </owl:Class>
+    
+
+
     <!-- http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing -->
 
     <owl:Class rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing">
+        <rdf:type rdf:resource="http://bicyclesharing.educationhost.cloud/Station"/>
         <rdfs:comment>Spatial Thing</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q515 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q515">
+        <rdf:type rdf:resource="http://bicyclesharing.educationhost.cloud/City"/>
+        <rdfs:label>Type City</rdfs:label>
     </owl:Class>
     
 
@@ -274,6 +375,14 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://www.schema.org/State -->
+
+    <owl:NamedIndividual rdf:about="http://www.schema.org/State">
+        <rdfs:label>has status</rdfs:label>
+    </owl:NamedIndividual>
     
 
 
@@ -297,6 +406,14 @@
 
     <owl:NamedIndividual rdf:about="http://www.wikidata.org/prop/direct/P1083">
         <rdfs:label>Capacity</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.wikidata.org/prop/direct/P276 -->
+
+    <owl:NamedIndividual rdf:about="http://www.wikidata.org/prop/direct/P276">
+        <rdfs:label>location</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -325,6 +442,9 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    <rdf:Description rdf:about="http://www.schema.org/State">
+        <rdfs:comment>the status of the station</rdfs:comment>
+    </rdf:Description>
     <rdf:Description rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#lat">
         <rdfs:comment>Latitude</rdfs:comment>
     </rdf:Description>
@@ -333,6 +453,9 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.wikidata.org/prop/direct/P1083">
         <rdfs:comment>Maximum capacity, number of docks</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.wikidata.org/prop/direct/P276">
+        <rdfs:comment>Location, located in which city</rdfs:comment>
     </rdf:Description>
     <rdf:Description rdf:about="http://www.wikidata.org/prop/direct/P5017">
         <rdfs:comment>Last update got from the station</rdfs:comment>

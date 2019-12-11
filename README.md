@@ -17,24 +17,24 @@ We talk here about the structure and the architecture of the system. Starting wi
 
 The technologies used in the implementation could be listed as follow:
 
-* The setup if the triplestore fuseki in our case where it is running on the localhost for testing matters and is accepting queries from outside (website data visualization, testing using curl... etc) by using the end-point provided by the triplestore.
+* The setup of the fuseki triplestore that, in our case, runs on the localhost for testing matters and is accepting queries from outside (website data visualization, testing using curl... etc) by using the end-point provided by the triplestore.
 
-* Definition of a model to represent stations using protege tool to generate an OWL file containing the structure we desire.It uses properties and classes of other ontologies and for some URIs we use (http://example.org) domain name to express our entities.
+* Definition of an ontology model to represent stations. Using protege tool, we generated an OWL file containing the structure we desire. It uses properties and classes of other ontologies and for some URIs we used [example.org](http://example.org) domain name to express our entities.
 
-* Implementation of a website where we can add new cities by specifiying the desired parameters (explained well in the how to use documenetation [documentation](https://github.com/ahmdIbrhm/BicycleSharingSystem/blob/master/documentation.md) ), also we allow the visualization of the stations of a selected city on a map. The data can be seen also as list where it contains embeded linked data using RDF-a that can be extracted using any disteller.
+* Implementation of a website where we can add new cities by specifiying the desired parameters (explained well in the how to use [documentation](https://github.com/ahmdIbrhm/BicycleSharingSystem/blob/master/documentation.md) ). Also we allow the visualization of the stations of a selected city on a map. The data can be seen also as list where it contains embeded linked data using RDF-a that can be extracted using any disteller.
 
-* The conversion tool is an extended tool where it exists before [Data_To_RDF](https://github.com/ahmdIbrhm/dataToRDF) and in this projects it adapts the usage of bicycle sharing open data and the model proposed in the next session.It uses Jena model to create triples while digging for the information in the loaded data.
+* The conversion tool is an extended tool [Data_To_RDF](https://github.com/ahmdIbrhm/dataToRDF) and in this project it adapts the usage of bicycle sharing open data and the model proposed in the next session. It uses Jena model to create triples while digging for the information in the loaded data.
 
 ### Bicyle Stations Model Definition
 
-In order to dump data about the stations into a triple-store we need some sort of a fixed model so later then we can run queries to get insights about the data inorder to visualize it.And in the case of bicycle stations we have updates on the states where the data is not static.So one can say that a station must have a unique state related to the context of time when this station had those specific information related to this time.The proposed solution is the following:
-* each station has a specific URI to be distinguished from other stations in the graph.
-* each staiton is associated with the static information about it (name,city,coordinates ).
-* the station has a lot of unique states which represents the dicussion before.
-* the state is associated to a date-time and the dynamic information (# available bikes, # available docks).
-* each city which the station is assoiciated to holds a configuration, which basically contain the information filled by the user so those parameters can be quieried later to get the data dynamically and dump them to the triple store.
+In order to dump data about the stations into a triple-store we need some sort of a fixed model so later then we can run queries to get insights about the data and visualize it. In our model, each station should have many states, where each of these states have different times from one another. On the other hand, each state has some parameters that express the status of the station at a specific time. This concept was demonstrated as follows:
+* Each station has a specific URI to be distinguished from other stations in the graph.
+* Each staiton is associated with the static information about it (name,city,coordinates ).
+* Each station has **some** states each represent the state of the station at a specific time.
+* The state is associated to a date-time and the dynamic information (Available bikes, Available docks, ...).
+* Each station is associated to a city. Each city holds a configuration, which basically contain the information filled by the user so those parameters can be queried later to get the data dynamically and dump them to the triple store.
 
-The model is generated using protege and the OWL file is attached to this repo here [Bicycle OWL](https://github.com/ahmdIbrhm/BicycleSharingSystem/blob/master/bicycle.owl)
+The model is generated using protege and the OWL file is attached to this repo here [Bicycle OWL](https://github.com/ahmdIbrhm/BicycleSharingSystem/blob/master/bicycle.owl). Addition to that, we can view the documentation by accessing the [documentation folder](https://github.com/ahmdIbrhm/BicycleSharingSystem/tree/master/Ontology%20Documentation). 
 A clear demonstration is available in this picture below:
 ![alt text](https://github.com/ahmdIbrhm/BicycleSharingSystem/blob/master/bicycle.svg "Bicyle stations model representation")
 
@@ -43,7 +43,7 @@ A clear demonstration is available in this picture below:
 * Query to get the available cities in the database:  
 `select ?city ?name where{ ?city <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> . ?city <http://www.w3.org/2000/01/rdf-schema#label> ?name }`
 
-The next three queries are to get the same content but we chosed the fastest one which is the first one:
+The next three queries are to get the same content but we chosed the fastest one (Query number 1.):
 
 1. Query to get the stations associated to the selected city with their current states and the information about the states:
 ```PREFIX wdt: <http://www.wikidata.org/prop/direct/>  
@@ -128,12 +128,12 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
     }
 ```
 ## Problems and limitations
-In the current implementation there some limitations that are caused by the fact of the diversity and interoperability problems:
+In the current implementation there were some limitations that are caused by the fact of the diversity and interoperability problems:
 
-* one could load a dataset that would not match with the structure maybe he would miss some neccessary information needed.
+* One could load a dataset that would not match with the structure so he would miss some information.
 * The parsing scenario would fail due to the structure of the data.
-* Dumping so often the data would start making the triple store slow in performance especially if the number of indexed triples exceeds a certain limit where the triple store stop scaling.
-* Allowing the exceptions in the strucure of the data would make the GUI of the input more complicated and not user-friendly.
+* Dumping so often to the triplestore would start making it slow in performance especially if the number of indexed triples exceeds a certain limit where the triple store stops scaling.
+* Covering all possible file structres would make the GUI of the input more complicated and not user-friendly.
 
 ## Evaluation
 ### What is done well?

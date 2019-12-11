@@ -1,7 +1,7 @@
 # Requirements to be Installed
 A server with the following requirements:
 * PHP
-* Apache Jena Fuseki triple store
+* Apache Jena Fuseki triple store **(Create new dataset called "test")**
 * Linux operating system
 
 A client with the following requirements:

@@ -12,7 +12,7 @@ A client with the following requirements:
 
 
 ## Linux "Permission Denied"
-The server should be running a Linux operating system, therefore sometimes writing in a file in Linux (from a java program) requires permission. In our case, we wanted to write the RDF data transformed from JSON, XML, or CSV to a new text file. But we faced a problem because of sudo permissions in Linux. So, in order to solve this problem, some commands should be launched in the directory where the project is found:
+The server should be running a Linux operating system, therefore sometimes writing in a file in Linux (from a java program) in some special directories requires permission. In our case, we wanted to write the RDF data transformed from JSON, XML, or CSV to a new text file that is found on the local host (/var/www). But we faced a problem because of sudo permissions in Linux. So, in order to solve this problem, some commands should be launched in the server:
 ```
 sudo adduser <username> www-data
 sudo chown -R www-data:www-data /var/www

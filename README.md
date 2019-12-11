@@ -153,13 +153,15 @@ The reason is that this tool is not extendable to be able to convert data about 
 #### As a team
 * Design of the ontology
 * Queries to get specific data
-* 
 #### Ahmad 
-* Implemented the processes of adding data to the triple store.
-* Created ontology file and description
+* Implemented the contexts of adding data to the triple store (Add city)
+* Data conversion from any format to RDF 
+* Created ontology file and description (Protege)
+* Storing data in background
 #### Ali
-
-
+* Implemented the contexts of querying data from the triple store. 
+* Data visualization (Map, Statistics)
+* RDF-a integrated in HTML
 
 
 

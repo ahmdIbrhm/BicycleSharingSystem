@@ -137,7 +137,7 @@ In the current implementation there some limitations that are caused by the fact
 The things that are robustly implemented:
 * **The ontology architecture and structure**  
 We reused some properties that describes bicycle-sharing stations such as some properties from [M3-lite](http://purl.org/iot/vocab/m3-lite) ontology. We also used pre-defined properties from [Wikidata](https://www.wikidata.org/wiki/Wikidata:List_of_properties).   
-Addition to that, the design of our ontology helps us to store several states for each station. We created a new class "State" that will organize the dataset which will be generated. This class has 4 properties which describes the state of the station at a specific time.
+Addition to that, the design of our ontology helps us to store several states for each station. We created a new class "State" that will be responsible for assigning some states to 1 station. Without this class, we couldn't store except only 1 state for each station. This class has 4 properties which describes the state of the station at a specific time.
 * **The website**  
 The website implemented uses semantic web technologies to query data and view them on a map. Addition to that, the page called map.php is implemented using HTML with integrated RDF-a. 
 * **The tool used to convert JSON, XML, or CSV into RDF**  

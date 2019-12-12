@@ -129,7 +129,8 @@ In the current implementation there were some limitations that are caused by the
 
 * Sometimes, the complex structure of the input data would let the parsing scenario fail.
 * Dumping so often to the triplestore would start making it slow in performance.
-* Covering all possible file structres would make the GUI of the input more complicated and not user-friendly.
+* Covering all possible file structures would make the GUI of the input more complicated and not user-friendly.
+* The tool used to convert data to RDF is limited to bicycle stations only.
 
 ## Evaluation
 ### What is done well?

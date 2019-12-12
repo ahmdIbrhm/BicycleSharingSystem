@@ -127,9 +127,8 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 ## Problems and limitations
 In the current implementation there were some limitations that are caused by the fact of the diversity and interoperability problems:
 
-* One could load a dataset that would not match with the structure so he would miss some information.
-* The parsing scenario would fail due to the structure of the data.
-* Dumping so often to the triplestore would start making it slow in performance especially if the number of indexed triples exceeds a certain limit where the triple store stops scaling.
+* Sometimes, the complex structure of the input data would let the parsing scenario fail.
+* Dumping so often to the triplestore would start making it slow in performance.
 * Covering all possible file structres would make the GUI of the input more complicated and not user-friendly.
 
 ## Evaluation

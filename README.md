@@ -149,9 +149,9 @@ The reason is that this tool is able to convert data about bicycle stations in a
 ### What is poorly done? 
 The things that are poorly implemented:
 * **The tool used to convert JSON, XML, or CSV into RDF**  
-The reason is that this tool is not extendable to be able to convert data about train stations and car stations
-* with complicated strucures from data sources the interface to add a city would be more complicated and not fiendly-user anymore.
-* Try another triple stores for performance matters and data indexing.
+The reason is that this tool is not extendable to be able to convert data about train stations and car stations and it won't cconvert complicated strucures 
+* **Triple Store** 
+Try another triple stores for performance matters and data indexing.
 
 ### Who did what?
 

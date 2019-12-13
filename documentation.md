@@ -9,7 +9,7 @@ A client with the following requirements:
 
 > **Note:** The server can be replaced by the localhost, but this requires the installation of Apache server.  
   
-> **Note:** Create new dataset called "test".
+> **Note:** Create new dataset called "test" in the triple store.
 
 
 

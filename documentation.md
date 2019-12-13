@@ -44,7 +44,22 @@ The user can add additional information about a station, by pressing the button 
 * Bank card
 
 When the user finishes filling the form, he presses the **"Send information"** button.
-
+> **Note:** we provide a configuration file that will be loaded to the fields using the **same keys** as in the example below in json format.
+```
+{
+	"cityName": "Lyon",
+	"dynamicDataLink": "https://download.data.grandlyon.com/wfs/rdata?SERVICE=WFS&VERSION=1.1.0&outputformat=GEOJSON&request=GetFeature&typename=jcd_jcdecaux.jcdvelov&SRSNAME=urn:ogc:def:crs:EPSG::4171",
+	"fileType": "json",
+	"pathId": "features.properties.number",
+	"pathStation": "features",
+	"name": "name",
+	"capacity": "bike_stands",
+	"lat": "lat",
+	"long": "lng",
+	"availableBicycles": "available_bikes",
+	"availableDocks": "available_bike_stands"
+}
+```
 # Stations of the Added cities
 
 To visualize the station of the added cities, the user should go to the tab named **Map**. There, a map will open and the user can choose a city and see all the added stations. When clicking on a marker, the map shows the corresponding information.

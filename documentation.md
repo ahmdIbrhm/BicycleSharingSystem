@@ -1,13 +1,14 @@
 # Requirements to be Installed
 A server with the following requirements:
 * PHP
-* Apache Jena Fuseki triple store **(Create new dataset called "test")**
+* Apache Jena Fuseki triple store 
 * Linux operating system
 
 A client with the following requirements:
 * A web browser
 
 > **Note:** The server can be replaced by the localhost, but this requires the installation of Apache server.
+> **Note:** Create new dataset called "test".
 
 
 

@@ -8,6 +8,7 @@ A client with the following requirements:
 * A web browser
 
 > **Note:** The server can be replaced by the localhost, but this requires the installation of Apache server.  
+  
 > **Note:** Create new dataset called "test".
 
 

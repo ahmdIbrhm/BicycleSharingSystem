@@ -1,0 +1,22 @@
+{
+   "last_updated":1571407932,
+   "ttl":60,
+   "data":{
+      "stations":[
+         {
+            "station_id":"101",
+            "name":"Châteaucreux",
+            "lat":45.442972,
+            "lon":4.398855,
+            "capacity":32
+         },
+         {
+            "station_id":"130",
+            "name":"Bicentenaire",
+            "lat":45.420286,
+            "lon":4.392776,
+            "capacity":16
+         }
+      ]
+   }
+}

@@ -1,0 +1,13 @@
+eu/qanswer/mapping/mappings/orcId/CustomMapping.class
+eu/qanswer/mapping/configuration/Mapping.class
+eu/qanswer/mapping/configuration/Type.class
+eu/qanswer/mapping/configuration/CSVConfigurationFile.class
+eu/qanswer/mapping/Main.class
+eu/qanswer/mapping/utility/Parser$1.class
+eu/qanswer/mapping/utility/Utility.class
+eu/qanswer/mapping/DynamicWork$DynamicCity.class
+eu/qanswer/mapping/Main$1.class
+eu/qanswer/mapping/DynamicWork.class
+eu/qanswer/mapping/utility/Parser.class
+eu/qanswer/mapping/configuration/JsonXmlConfigurationFile.class
+eu/qanswer/mapping/configuration/AbstractConfigurationFile.class

@@ -1,0 +1,8 @@
+<http://www.example.org/Paris> <http://www.w3.org/2000/01/rdf-schema#label> "Paris" .
+<http://www.example.org/Paris> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.wikidata.org/entity/Q515> .
+<http://www.example.org/Paris> <http://schema.org/Property> <http://www.example.org/Paris/dynamicConfiguration> .
+<http://www.example.org/Paris/dynamicConfiguration> <http://www.wikidata.org/prop/direct/P2699> "https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true&csv_separator=%3B" .
+<http://www.example.org/Paris/dynamicConfiguration> <http://www.example.org/keyTag> "k" .
+<http://www.example.org/Paris/dynamicConfiguration> <http://www.example.org/fileType> "csv" .
+<http://www.example.org/Paris/dynamicConfiguration> <http://www.example.org/iteratorTag> "i" .
+<http://www.example.org/Paris/dynamicConfiguration> <http://www.example.org/allMappings> "\\.Nom de la station\\z~http://www.w3.org/2000/01/rdf-schema#label~literal&\\.geo\\z~http://www.w3.org/2003/01/geo/wgs84_pos#lat~decimal&\\.duedate\\z~http://www.w3.org/2003/01/geo/wgs84_pos#long~decimal&\\.Nombres de bornes en station\\z~http://www.wikidata.org/prop/direct/P1083~integer&\\.Nombre de v��lo m��canique\\z~http://smart-ics.ee.surrey.ac.uk/ontology/m3-lite.owl#CountAvailableBicycles~literal&\\.Nombre de bornes disponibles\\z~http://purl.org/iot/vocab/m3-lite#CountEmptyDockingPoints~literal" .
